@@ -8,7 +8,7 @@ type LoginCodeOutput struct {
 
 
 
-type UserLoginInput struct {
+type UserLoginInput1 struct {
   Username string
   Password string	
 	Code string

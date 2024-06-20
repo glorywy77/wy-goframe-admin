@@ -6,5 +6,4 @@ package logic
 
 import (
 	_ "wy-goframe-admin/internal/logic/login"
-	_ "wy-goframe-admin/internal/logic/middleware"
 )

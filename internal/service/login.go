@@ -13,7 +13,7 @@ import (
 type (
 	ILogin interface {
 		LoginCode(ctx context.Context) (Data *model.LoginCodeOutput, err error)
-		UserLogin(ctx context.Context, in *model.UserLoginInput) (Data *model.UserLoginOutput, err error)
+		UserLogin(ctx context.Context, in *model.UserLoginInput1) (Data *model.UserLoginOutput, err error)
 	}
 )
 

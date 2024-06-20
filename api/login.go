@@ -7,7 +7,7 @@ import (
 )
 
 type LoginCodeReq struct {
-	g.Meta `path:"/login/code" tags:"LoginService" method:"post" summary:"登录获取验证码"`
+	g.Meta `path:"/login/code" tags:"LoginService" method:"get" summary:"登录获取验证码"`
 }
 type LoginCodeRes struct {
 	Code *model.LoginCodeOutput
