@@ -1,4 +1,7 @@
-
-# CLI tool, only in development environment.
-# https://goframe.org/pages/viewpage.action?pageId=3673173
+# GoFrame CLI tool configuration.
 gfcli:
+  gen:
+    dao:
+      - link: "mysql:root:root@tcp(192.168.162.129:13306)/wy-goframe-admin"
+        descriptionTag: true
+        noModelComment: true

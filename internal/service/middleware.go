@@ -1,6 +1,8 @@
 package service
 
-import "github.com/gogf/gf/v2/net/ghttp"
+import (
+	"github.com/gogf/gf/v2/net/ghttp"
+)
 
 type middlewareService struct{}
 
@@ -19,3 +21,9 @@ func (s *middlewareService) Auth(r *ghttp.Request) {
 	Auth().MiddlewareFunc()(r)
 	r.Middleware.Next()
 }
+
+// // session中记录用户
+// func (s *middlewareService) SetSession(r *ghttp.Request, Username string) {
+// 	r.Session.MustSet("Username", User)
+// 	r.Middleware.Next()
+// }
