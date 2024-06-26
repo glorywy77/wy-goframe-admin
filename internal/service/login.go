@@ -8,12 +8,14 @@ package service
 import (
 	"context"
 	"wy-goframe-admin/internal/model"
+
+	jwt "github.com/gogf/gf-jwt/v2"
 )
 
 type (
 	ILogin interface {
+		Auth() *jwt.GfJWTMiddleware
 		LoginCode(ctx context.Context) (Data *model.LoginCodeOutput, err error)
-		UserLogin(ctx context.Context, in *model.UserLoginInput1) (Data *model.UserLoginOutput, err error)
 	}
 )
 

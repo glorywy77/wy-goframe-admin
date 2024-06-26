@@ -13,7 +13,7 @@ import (
 
 type (
 	ICasbin interface {
-		SelectRole(ctx context.Context, r *ghttp.Request) (err error)
+		SelectRole(ctx context.Context, r *ghttp.Request)
 	}
 )
 

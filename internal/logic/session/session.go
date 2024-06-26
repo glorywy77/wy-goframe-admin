@@ -1,7 +1,6 @@
 package session
 
 import (
-	"fmt"
 	"wy-goframe-admin/internal/service"
 
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -25,10 +24,6 @@ func (s *sSession) SetSession(r *ghttp.Request) {
 		Username := r.Get("Username")
 		gconv.String(Username)
 		r.Session.MustSet("Username", Username)
-		fmt.Printf("Usernamexxx: %v\n", Username)
-		fmt.Println(r.Session.Data())
-	} else {
-		fmt.Println(r.Session.Data())
-	}
 
+	}
 }

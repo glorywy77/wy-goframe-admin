@@ -2,11 +2,15 @@ package login
 
 import (
 	"context"
-	"errors"
+	"time"
 	"wy-goframe-admin/internal/model"
 	"wy-goframe-admin/internal/service"
 
+	jwt "github.com/gogf/gf-jwt/v2"
+	_ "github.com/gogf/gf/contrib/nosql/redis/v2"
+	"github.com/gogf/gf/v2/database/gredis"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gcache"
 )
 
 type (
@@ -19,28 +23,101 @@ func New() *sLogin {
 
 func init() {
 	service.RegisterLogin(New())
+
 }
 
-// 登录验证码函数必须大写驼峰
+var authService *jwt.GfJWTMiddleware
+
+func (s *sLogin) Auth() *jwt.GfJWTMiddleware {
+
+	var redisConfig = &gredis.Config{
+		Address: "192.168.162.129:6379",
+		Pass:    "canpanscp",
+		Db:      0,
+	}
+
+	redis, err := gredis.New(redisConfig)
+	if err != nil {
+		panic(err)
+	}
+
+	redisAdapter := gcache.NewAdapterRedis(redis)
+
+	auth := jwt.New(&jwt.GfJWTMiddleware{
+		Realm:           "test zone",
+		Key:             []byte("secret key11"),
+		Timeout:         time.Hour * 24,
+		MaxRefresh:      time.Hour * 24,
+		IdentityKey:     "id",
+		TokenLookup:     "header: Authorization, query: token, cookie: jwt",
+		TokenHeadName:   "Bearer",
+		TimeFunc:        time.Now,
+		Authenticator:   Authenticator,
+		Unauthorized:    Unauthorized,
+		PayloadFunc:     PayloadFunc,
+		IdentityHandler: IdentityHandler,
+		CacheAdapter:    redisAdapter,
+	})
+	authService = auth
+	return authService
+}
+
+// PayloadFunc is a callback function that will be called during login.
+// Using this function it is possible to add additional payload data to the webtoken.
+// The data is then made available during requests via c.Get("JWT_PAYLOAD").
+// Note that the payload is not encrypted.
+// The attributes mentioned on jwt.io can't be used as keys for the map.
+// Optional, by default no additional data will be set.
+func PayloadFunc(data interface{}) jwt.MapClaims {
+	claims := jwt.MapClaims{}
+	params := data.(map[string]interface{})
+	if len(params) > 0 {
+		for k, v := range params {
+			claims[k] = v
+		}
+	}
+	return claims
+}
+
+// IdentityHandler get the identity from JWT and set the identity for every request
+// Using this function, by r.GetParam("id") get identity
+func IdentityHandler(ctx context.Context) interface{} {
+	claims := jwt.ExtractClaims(ctx)
+	return claims[authService.IdentityKey]
+}
+
+// Unauthorized is used to define customized Unauthorized callback function.
+func Unauthorized(ctx context.Context, code int, message string) {
+	r := g.RequestFromCtx(ctx)
+	r.Response.WriteJson(g.Map{
+		"code":    code,
+		"message": message,
+	})
+	r.ExitAll()
+}
+
+// Authenticator is used to validate login parameters.
+// It must return user data as user identifier, it will be stored in Claim Array.
+// if your identityKey is 'id', your user data must have 'id'
+// Check error (e) to determine the appropriate error message.
+func Authenticator(ctx context.Context) (interface{}, error) {
+	var (
+		r  = g.RequestFromCtx(ctx)
+		in model.UserLoginInput
+	)
+	if err := r.Parse(&in); err != nil {
+		return "", err
+	}
+	if user := service.User().GetUserByUserNamePassword(ctx, in); user != nil {
+		return user, nil
+	}
+	return nil, jwt.ErrFailedAuthentication
+}
+
+// 登录验证码
 func (s *sLogin) LoginCode(ctx context.Context) (Data *model.LoginCodeOutput, err error) {
 	//作为测试先写死
-	testCode := "test1122331"
+	testCode := "ASXSD"
 	Data = &model.LoginCodeOutput{Code: testCode}
 	return Data, nil
-}
-
-// 用户登录
-func (s *sLogin) UserLogin(ctx context.Context, in *model.UserLoginInput1) (Data *model.UserLoginOutput, err error) {
-	if in.Username == "admin" || in.Username == "editor" && in.Password == "123456" {
-		g.Log().Infof(ctx, "用户名在白名单内: %v", in.Username)
-		testToekn := "sdsafasdsadsadsadsadagd32313sjdhakhdahdka"
-		Data = &model.UserLoginOutput{Token: testToekn}
-
-	} else {
-		g.Log().Errorf(ctx, "用户名或密码错误: %v", in.Username)
-		Data = &model.UserLoginOutput{Token: ""}
-		err = errors.New("用户名或密码错误")
-
-	}
-	return
 }

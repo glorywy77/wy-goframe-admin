@@ -7,6 +7,7 @@ package logic
 import (
 	_ "wy-goframe-admin/internal/logic/casbin"
 	_ "wy-goframe-admin/internal/logic/login"
-	_ "wy-goframe-admin/internal/logic/mm"
+	_ "wy-goframe-admin/internal/logic/middelware"
 	_ "wy-goframe-admin/internal/logic/session"
+	_ "wy-goframe-admin/internal/logic/user"
 )

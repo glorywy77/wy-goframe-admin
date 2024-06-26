@@ -22,21 +22,18 @@ var (
 				group.Middleware(
 					ghttp.MiddlewareHandlerResponse,
 					ghttp.MiddlewareCORS,
-					service.Mm().Session,
+					service.Middelware().Session,
 				)
 
 				group.Bind(
-					// hello.New(),
-					// controller.Login,
-					controller.Auth,
-					// hello.New(),
+					controller.Login,
 				)
 
 				// Special handler that needs authentication.
 				group.Group("/", func(group *ghttp.RouterGroup) {
 					group.Middleware(
-						// service.Mm().Auth,
-						service.Mm().Casbin,
+						service.Middelware().Auth,
+						service.Middelware().Casbin,
 					)
 					// group.ALLMap(g.Map{
 					// 	"/user/info": controller.User.Info,
@@ -44,7 +41,6 @@ var (
 					group.Bind(
             hello.New(),
 						controller.User,
-						controller.Login,
 					)
 				})
 			})

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"time"
 	"wy-goframe-admin/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -13,12 +14,27 @@ type LoginCodeRes struct {
 	Code *model.LoginCodeOutput
 }
 
-type UserLoginReq struct {
-	g.Meta   `path:"/users/login" tags:"LoginService" method:"post" summary:"登录获取验证码"`
-	Username string `json:"username" v:"required#用户名不能为空" dc:"用户名"`
-	Password string `json:"password" v:"required#密码不能为空" dc:"密码"`
-	Code     string `json:"code" v:"required#验证码不能为空" dc:"验证码"`
+type AuthLoginReq struct {
+	g.Meta `path:"/login" method:"post"`
 }
-type UserLoginRes struct {
-	Token *model.UserLoginOutput
+
+type AuthLoginRes struct {
+	Token  string    `json:"token"`
+	Expire time.Time `json:"expire"`
+}
+
+type AuthRefreshTokenReq struct {
+	g.Meta `path:"/refresh_token" method:"post"`
+}
+
+type AuthRefreshTokenRes struct {
+	Token  string    `json:"token"`
+	Expire time.Time `json:"expire"`
+}
+
+type AuthLogoutReq struct {
+	g.Meta `path:"/logout" method:"post"`
+}
+
+type AuthLogoutRes struct {
 }
