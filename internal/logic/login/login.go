@@ -6,9 +6,11 @@ import (
 	"wy-goframe-admin/internal/model"
 	"wy-goframe-admin/internal/service"
 
-	jwt "github.com/gogf/gf-jwt/v2"
+	jwt "wy-goframe-admin/internal/logic/login/jwt"
+
 	_ "github.com/gogf/gf/contrib/nosql/redis/v2"
-	"github.com/gogf/gf/v2/database/gredis"
+
+	//"github.com/gogf/gf/v2/database/gredis"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcache"
 )
@@ -30,18 +32,21 @@ var authService *jwt.GfJWTMiddleware
 
 func (s *sLogin) Auth() *jwt.GfJWTMiddleware {
 
-	var redisConfig = &gredis.Config{
-		Address: "192.168.162.129:6379",
-		Pass:    "canpanscp",
-		Db:      0,
-	}
+	//写法一
+	// var redisConfig = &gredis.Config{
+	// 	Address: "192.168.162.129:6379",
+	// 	Pass:    "canpanscp",
+	// 	Db:      0,
+	// }
 
-	redis, err := gredis.New(redisConfig)
-	if err != nil {
-		panic(err)
-	}
+	// redis, err := gredis.New(redisConfig)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// redisAdapter := gcache.NewAdapterRedis(redis)
 
-	redisAdapter := gcache.NewAdapterRedis(redis)
+	//写法二,配置文件
+	redisAdapter := gcache.NewAdapterRedis(g.Redis())
 
 	auth := jwt.New(&jwt.GfJWTMiddleware{
 		Realm:           "test zone",

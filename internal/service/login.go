@@ -7,9 +7,8 @@ package service
 
 import (
 	"context"
+	jwt "wy-goframe-admin/internal/logic/login/jwt"
 	"wy-goframe-admin/internal/model"
-
-	jwt "github.com/gogf/gf-jwt/v2"
 )
 
 type (
