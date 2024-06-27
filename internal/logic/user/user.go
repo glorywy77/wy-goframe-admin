@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 
+	"wy-goframe-admin/internal/dao"
 	"wy-goframe-admin/internal/model"
 	"wy-goframe-admin/internal/service"
 
@@ -29,4 +30,13 @@ func (s *sUser) GetUserByUserNamePassword(ctx context.Context, in model.UserLogi
 		}
 	}
 	return nil
+}
+
+func (s *sUser) UserCreate(ctx context.Context, in model.UserCreateInput) (Data *model.UserCreateOutput, err error) {
+	_, err = dao.User.Ctx(ctx).Data(in).Save()
+	if err != nil {
+		return nil, err
+	}
+	Data = &model.UserCreateOutput{Result: "success"}
+	return
 }

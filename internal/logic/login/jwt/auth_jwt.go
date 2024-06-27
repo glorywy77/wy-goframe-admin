@@ -359,7 +359,7 @@ func (mw *GfJWTMiddleware) LogoutHandler(ctx context.Context) {
 		return
 	}
 
-	return
+	//return 
 }
 
 // RefreshHandler can be used to refresh a token. The token still needs to be valid on refresh.

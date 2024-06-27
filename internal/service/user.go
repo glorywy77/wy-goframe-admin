@@ -13,6 +13,7 @@ import (
 type (
 	IUser interface {
 		GetUserByUserNamePassword(ctx context.Context, in model.UserLoginInput) map[string]interface{}
+		UserCreate(ctx context.Context, in model.UserCreateInput) (Data *model.UserCreateOutput, err error)
 	}
 )
 
