@@ -37,4 +37,5 @@ type AuthLogoutReq struct {
 }
 
 type AuthLogoutRes struct {
+	Result string
 }

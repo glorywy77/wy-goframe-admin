@@ -56,6 +56,8 @@ github.com/go-sql-driver/mysql v1.8.1/go.mod h1:wEBSXgmK//2ZFJyE+qWnIsVGmvmEKlqw
 github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0/go.mod h1:fyg7847qk6SyHyPtNmDHnmrv/HOrqktSC+C9fM+CJOE=
 github.com/gogf/gf-jwt/v2 v2.1.0 h1:79/KH6vo3IAtHTvRubE8/NXKDF6/UisItLVpdsTTIjE=
 github.com/gogf/gf-jwt/v2 v2.1.0/go.mod h1:AGEJOkG64G8ZYOi50ObYgJ+D7L3W4GcTW65m6VVGbmI=
+github.com/gogf/gf/contrib/drivers/mysql/v2 v2.7.2 h1:GpE2JuHVoNJD4lNP1omC1+TKXNCSvXr5oil1bNULYd0=
+github.com/gogf/gf/contrib/drivers/mysql/v2 v2.7.2/go.mod h1:0h3UmNAmA8hnjvTyozZelSWWxiAjGDQttzZqMhkCkJo=
 github.com/gogf/gf/contrib/nosql/redis/v2 v2.7.2 h1:V1hdGnyjU9kT0I3DDDFDl6Ll8yC6aAIFJa/lMQwB8V4=
 github.com/gogf/gf/contrib/nosql/redis/v2 v2.7.2/go.mod h1:XzkPv3G8TdKczqoB/ydR3bxvBRdQLQNCOCEgxso/c3o=
 github.com/gogf/gf/v2 v2.0.0-rc3/go.mod h1:apktt6TleWtCIwpz63vBqUnw8MX8gWKoZyxgDpXFtgM=
@@ -169,6 +171,8 @@ golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACk
 golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
+golang.org/x/crypto v0.24.0 h1:mnl8DM0o513X8fdIkmyFE/5hTYxbwYOjDS/+rK6qpRI=
+golang.org/x/crypto v0.24.0/go.mod h1:Z1PMYSOR5nyMcyAVAIQSKCDwalqy85Aqn1x3Ws4L5DM=
 golang.org/x/mod v0.3.0/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/mod v0.4.2/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/net v0.0.0-20180218175443-cbe0f9307d01/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=

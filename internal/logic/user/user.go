@@ -32,11 +32,17 @@ func (s *sUser) GetUserByUserNamePassword(ctx context.Context, in model.UserLogi
 	return nil
 }
 
-func (s *sUser) UserCreate(ctx context.Context, in model.UserCreateInput) (Data *model.UserCreateOutput, err error) {
-	_, err = dao.User.Ctx(ctx).Data(in).Save()
-	if err != nil {
-		return nil, err
-	}
-	Data = &model.UserCreateOutput{Result: "success"}
+func (s *sUser) UserCreate(ctx context.Context, in model.UserCreateInput) (err error) {
+	_, err = dao.User.Ctx(ctx).Data(in).Insert()
+
 	return
 }
+
+// func(s *sUser) UserGet(ctx context.Context, in model.UserGetInput)(*model.UserGetOutput, error){
+// 	// 查询用户
+// 	user, err := dao.User.Ctx(ctx).WherePri(in.Id).One()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	// 查询用户角色
+// }
