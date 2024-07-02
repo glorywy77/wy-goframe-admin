@@ -1,6 +1,6 @@
 package model
 
-import "time"
+import "github.com/gogf/gf/v2/os/gtime"
 
 type UserLoginInput struct {
 	UserName string
@@ -8,14 +8,29 @@ type UserLoginInput struct {
 }
 
 type UserCreateInput struct {
-	UserName    string
-	Password    string
-	Email       string
-	Role        string
-	Status      int
-	Create_time time.Time
+	UserName string
+	Password string
+	Email    string
+	Role     string
+	Enable   int
 }
 
 type UserCreateOutput struct {
-  Result string
+	Result string
+}
+
+type UserPageInput struct {
+	UserName string
+	Size     int
+	Page     int
+}
+
+type UserPageOutput struct {
+	UserName  string
+	Email     string
+	Role      string
+	Enable    int
+	Create_at *gtime.Time
+	Update_at *gtime.Time
+	Remark    string
 }

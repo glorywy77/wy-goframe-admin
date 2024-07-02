@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"time"
 	"wy-goframe-admin/api"
 	"wy-goframe-admin/internal/model"
 	"wy-goframe-admin/internal/service"
@@ -34,12 +33,11 @@ func (c *userController) Create(ctx context.Context, req *api.UserCreateReq) (re
 
 	Password := gconv.String(hashedPassword)
 	err = service.User().UserCreate(ctx, model.UserCreateInput{
-		UserName:    req.UserName,
-		Password:    Password,
-		Email:       req.Email,
-		Role:        req.Role,
-		Status:      req.Status,
-		Create_time: time.Now(),
+		UserName: req.UserName,
+		Password: Password,
+		Email:    req.Email,
+		Role:     req.Role,
+		Enable:   req.Enable,
 	})
 	if err != nil {
 		return nil, err
@@ -49,4 +47,26 @@ func (c *userController) Create(ctx context.Context, req *api.UserCreateReq) (re
 		Result: "用户创建成功",
 	}
 	return res, nil
+}
+
+func (c *userController) Page(ctx context.Context, req *api.UserPageReq) (res *api.UserPageRes, err error) {
+	data, total, err := service.User().UserPage(ctx, model.UserPageInput{
+		UserName: req.UserName,
+		Page:     req.Page,
+		Size:     req.Size,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &api.UserPageRes{
+		CommonPaginationReq: api.CommonPaginationReq{
+			Size: req.Size,
+			Page: req.Page,
+		},
+		CommonPaginationRes: api.CommonPaginationRes{
+			Total: total,
+		},
+		Items: data,
+	}
+	return
 }

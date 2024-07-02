@@ -22,11 +22,14 @@ var (
 				group.Middleware(
 					ghttp.MiddlewareHandlerResponse,
 					ghttp.MiddlewareCORS,
+
+					//这里是之前为了测试通过添加session来获取用户名，现在的用户名在jwt中取的所以暂时没有实际作用
 					service.Middelware().Session,
 				)
 
 				group.Bind(
 					controller.Login,
+					
 				)
 
 				// Special handler that needs authentication.
@@ -39,7 +42,7 @@ var (
 					// 	"/user/info": controller.User.Info,
 					// })
 					group.Bind(
-            hello.New(),
+						hello.New(),
 						controller.User,
 					)
 				})

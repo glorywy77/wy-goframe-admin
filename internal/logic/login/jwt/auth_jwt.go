@@ -262,7 +262,7 @@ func (mw *GfJWTMiddleware) MiddlewareFunc() ghttp.HandlerFunc {
 	}
 }
 
-// GetClaimsFromJWT get claims from JWT token
+// GetClaimsFromJWT get claims from JWT token 这部分需要重点理解！！
 func (mw *GfJWTMiddleware) GetClaimsFromJWT(ctx context.Context) (MapClaims, string, error) {
 	r := g.RequestFromCtx(ctx)
 
@@ -760,8 +760,9 @@ func (mw *GfJWTMiddleware) middlewareImpl(ctx context.Context) {
 	identity := mw.IdentityHandler(ctx)
 	if identity != nil {
 		r.SetParam(mw.IdentityKey, identity)
+		//这里可以理解了IdentityKey（id）实际是从token中解析而来
 	}
-
+  
 	if !mw.Authorizator(identity, ctx) {
 		mw.unauthorized(ctx, http.StatusForbidden, mw.HTTPStatusMessageFunc(ErrForbidden, ctx))
 		return

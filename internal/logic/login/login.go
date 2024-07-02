@@ -113,7 +113,7 @@ func Authenticator(ctx context.Context) (interface{}, error) {
 	if err := r.Parse(&in); err != nil {
 		return "", err
 	}
-	if user := service.User().GetUserByUserNamePassword(ctx, in); user != nil {
+	if user := service.User().UserCheck(ctx, in); user != nil {
 		return user, nil
 	}
 	return nil, jwt.ErrFailedAuthentication

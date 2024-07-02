@@ -1,7 +1,6 @@
 package middelware
 
 import (
-	"context"
 	"wy-goframe-admin/internal/service"
 
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -34,7 +33,6 @@ func (s *sMiddelware) Session(r *ghttp.Request) {
 }
 
 func (s *sMiddelware) Casbin(r *ghttp.Request) {
-	var ctx context.Context
-	service.Casbin().SelectRole(ctx, r)
-
+	service.Casbin().SelectRole(r)
+  r.Middleware.Next()
 }

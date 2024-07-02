@@ -12,8 +12,9 @@ import (
 
 type (
 	IUser interface {
-		GetUserByUserNamePassword(ctx context.Context, in model.UserLoginInput) map[string]interface{}
+		UserCheck(ctx context.Context, in model.UserLoginInput) (userMap map[string]interface{})
 		UserCreate(ctx context.Context, in model.UserCreateInput) (err error)
+		UserPage(ctx context.Context, in model.UserPageInput) (out []*model.UserPageOutput, total int, err error)
 	}
 )
 

@@ -6,14 +6,12 @@
 package service
 
 import (
-	"context"
-
 	"github.com/gogf/gf/v2/net/ghttp"
 )
 
 type (
 	ICasbin interface {
-		SelectRole(ctx context.Context, r *ghttp.Request)
+		SelectRole(r *ghttp.Request)
 	}
 )
 

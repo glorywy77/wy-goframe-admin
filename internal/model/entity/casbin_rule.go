@@ -15,4 +15,5 @@ type CasbinRule struct {
 	V4      string `json:"v4"      description:""`
 	V5      string `json:"v5"      description:""`
 	Summary string `json:"summary" description:"接口的概要信息"`
+	Ptype   string `json:"ptype"   description:""`
 }
