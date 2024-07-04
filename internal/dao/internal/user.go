@@ -24,7 +24,7 @@ type UserColumns struct {
 	Username string //
 	Password string //
 	Email    string //
-	Role     string //
+	Roles    string //
 	Enable   string //
 	CreateAt string //
 	UpdateAt string //
@@ -37,7 +37,7 @@ var userColumns = UserColumns{
 	Username: "username",
 	Password: "password",
 	Email:    "email",
-	Role:     "role",
+	Roles:    "roles",
 	Enable:   "enable",
 	CreateAt: "create_at",
 	UpdateAt: "update_at",

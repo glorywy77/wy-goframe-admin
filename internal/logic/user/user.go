@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"errors"
 
 	"wy-goframe-admin/internal/dao"
 	"wy-goframe-admin/internal/model"
@@ -56,18 +57,27 @@ func (s *sUser) UserCheck(ctx context.Context, in model.UserLoginInput) (userMap
 	if err != nil {
 		return nil
 	}
+
+	if hashedPassword == nil {
+		err = errors.New("用户名不存在")
+		g.Log().Errorf(ctx, "%v", err)
+		return nil
+	}
 	err = bcrypt.CompareHashAndPassword([]byte(gconv.String(hashedPassword)), []byte(in.Password))
 	if err != nil {
+		err = errors.New("密码不正确")
+		g.Log().Errorf(ctx, "%v", err)
 		return nil
 	}
 
 	//查询用户信息
 	type User struct {
-		ID       int    `json:"id"`
-		Username string `json:"username"`
+		ID       int     `json:"id"`
+		Username string  `json:"username"`
+		Roles    g.Slice `json:"roles"`
 	}
 	user := User{}
-	err = m.Fields("id,username").Where("username", in.UserName).Scan(&user)
+	err = m.Fields("id,username,roles").Where("username", in.UserName).Scan(&user)
 	if err != nil {
 		return nil
 	}
@@ -86,13 +96,7 @@ func (s *sUser) UserCreate(ctx context.Context, in model.UserCreateInput) (err e
 // 分页返回用户信息
 func (s *sUser) UserPage(ctx context.Context, in model.UserPageInput) (out []*model.UserPageOutput, total int, err error) {
 	m := dao.User.Ctx(ctx)
-
-	//判断in.UserName是否存在
-	if in.UserName != "" {
-		err = m.Fields(`username,email,role,enable,create_at,update_at,remark`).Where("username", in.UserName).OrderDesc("id").Limit(in.Size, (in.Page-1)*in.Size).ScanAndCount(&out, &total, false)
-	} else {
-		err = m.Fields(`username,email,role,enable,create_at,update_at,remark`).OrderDesc("id").Limit(in.Size, (in.Page-1)*in.Size).ScanAndCount(&out, &total, false)
-	}
+	err = m.Fields(`username,email,roles,enable,create_at,update_at,remark`).WhereLike("username", "%"+in.UserName).OrderAsc("id").Limit(in.Size, (in.Page-1)*in.Size).ScanAndCount(&out, &total, false)
 
 	if err != nil {
 		return nil, 0, err

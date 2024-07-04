@@ -3,8 +3,10 @@ package jwt
 import (
 	"context"
 	"crypto/rsa"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 	"strings"
 	"time"
 
@@ -12,6 +14,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gcache"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/golang-jwt/jwt/v4"
 )
 
@@ -359,7 +362,7 @@ func (mw *GfJWTMiddleware) LogoutHandler(ctx context.Context) {
 		return
 	}
 
-	//return 
+	//return
 }
 
 // RefreshHandler can be used to refresh a token. The token still needs to be valid on refresh.
@@ -484,13 +487,16 @@ func (mw *GfJWTMiddleware) GetToken(ctx context.Context) string {
 }
 
 // GetPayload help to get the payload map
-func (mw *GfJWTMiddleware) GetPayload(ctx context.Context) string {
+// 原本这里返回的是字符串，我希望是map类型
+func (mw *GfJWTMiddleware) GetPayload(ctx context.Context) map[string]interface{} {
+
 	r := g.RequestFromCtx(ctx)
-	token := r.Get(PayloadKey).String()
-	if len(token) == 0 {
-		return ""
+	token := r.Get(PayloadKey)
+	if len(gconv.String(token)) == 0 {
+		return make(map[string]interface{})  // 返回一个空的 map
 	}
-	return token
+	fmt.Printf("reflect.TypeOf(token): %v\n", reflect.TypeOf(token))
+	return gconv.Map(token)
 }
 
 // GetIdentity help to get the identity
@@ -762,7 +768,7 @@ func (mw *GfJWTMiddleware) middlewareImpl(ctx context.Context) {
 		r.SetParam(mw.IdentityKey, identity)
 		//这里可以理解了IdentityKey（id）实际是从token中解析而来
 	}
-  
+
 	if !mw.Authorizator(identity, ctx) {
 		mw.unauthorized(ctx, http.StatusForbidden, mw.HTTPStatusMessageFunc(ErrForbidden, ctx))
 		return
@@ -782,7 +788,7 @@ func (mw *GfJWTMiddleware) setBlacklist(ctx context.Context, token string, claim
 	exp := int64(claims["exp"].(float64))
 
 	// save duration time = (exp + max_refresh) - now
-	
+
 	// duration := time.Unix(exp, 0).Add(mw.MaxRefresh).Sub(mw.TimeFunc()).Truncate(time.Second)
 	// 上面的逻辑存在一个问题，time.Unix的第一个参数单位是秒，就会导致算出来的时间多了3个所以除以1000
 	duration := time.Unix(exp/1000, 0).Add(mw.MaxRefresh).Sub(mw.TimeFunc()).Truncate(time.Second)

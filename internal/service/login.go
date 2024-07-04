@@ -8,13 +8,12 @@ package service
 import (
 	"context"
 	jwt "wy-goframe-admin/internal/logic/login/jwt"
-	"wy-goframe-admin/internal/model"
 )
 
 type (
 	ILogin interface {
 		Auth() *jwt.GfJWTMiddleware
-		LoginCode(ctx context.Context) (Data *model.LoginCodeOutput, err error)
+		LoginCode(ctx context.Context) (out string, err error)
 	}
 )
 

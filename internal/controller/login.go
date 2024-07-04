@@ -35,7 +35,7 @@ func (c *cLogin) LoginCode(ctx context.Context, req *api.LoginCodeReq) (res *api
 		return nil, err
 	}
 	res = &api.LoginCodeRes{
-		Code: data,
+		CodeUrl: data,
 	}
 	g.Dump(res)
 	return res, nil

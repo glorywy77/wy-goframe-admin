@@ -14,8 +14,8 @@ type User struct {
 	Username string      `json:"username" description:""`
 	Password string      `json:"password" description:""`
 	Email    string      `json:"email"    description:""`
-	Role     string      `json:"role"     description:""`
-	Enable   string      `json:"enable"   description:""`
+	Roles    string      `json:"roles"    description:""`
+	Enable   int         `json:"enable"   description:""`
 	CreateAt *gtime.Time `json:"createAt" description:""`
 	UpdateAt *gtime.Time `json:"updateAt" description:""`
 	Remark   string      `json:"remark"   description:""`

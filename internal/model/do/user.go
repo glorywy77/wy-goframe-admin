@@ -16,7 +16,7 @@ type User struct {
 	Username interface{} //
 	Password interface{} //
 	Email    interface{} //
-	Role     interface{} //
+	Roles    interface{} //
 	Enable   interface{} //
 	CreateAt *gtime.Time //
 	UpdateAt *gtime.Time //

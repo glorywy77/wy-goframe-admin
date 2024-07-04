@@ -36,7 +36,7 @@ func (c *userController) Create(ctx context.Context, req *api.UserCreateReq) (re
 		UserName: req.UserName,
 		Password: Password,
 		Email:    req.Email,
-		Role:     req.Role,
+		Roles:     req.Roles,
 		Enable:   req.Enable,
 	})
 	if err != nil {

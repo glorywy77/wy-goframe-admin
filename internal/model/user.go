@@ -1,6 +1,9 @@
 package model
 
-import "github.com/gogf/gf/v2/os/gtime"
+import (
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
+)
 
 type UserLoginInput struct {
 	UserName string
@@ -11,7 +14,7 @@ type UserCreateInput struct {
 	UserName string
 	Password string
 	Email    string
-	Role     string
+	Roles    g.Slice
 	Enable   int
 }
 
@@ -28,7 +31,7 @@ type UserPageInput struct {
 type UserPageOutput struct {
 	UserName  string
 	Email     string
-	Role      string
+	Roles     g.Slice
 	Enable    int
 	Create_at *gtime.Time
 	Update_at *gtime.Time

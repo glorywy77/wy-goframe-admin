@@ -1,6 +1,6 @@
 package model
 
 
-type LoginCodeOutput struct {
-	Code string
-}
+// type LoginCodeOutput struct {
+// 	Code string
+// }

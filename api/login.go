@@ -2,20 +2,19 @@ package api
 
 import (
 	"time"
-	"wy-goframe-admin/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
 )
 
 type LoginCodeReq struct {
-	g.Meta `path:"/login/code" tags:"LoginService" method:"get" summary:"登录获取验证码"`
+	g.Meta `path:"/api/login/code" tags:"LoginService" method:"get" summary:"登录获取验证码"`
 }
 type LoginCodeRes struct {
-	Code *model.LoginCodeOutput
+	CodeUrl string `json:"codeurl"`
 }
 
 type AuthLoginReq struct {
-	g.Meta `path:"/login" method:"post"`
+	g.Meta `path:"/api/login" method:"post"`
 }
 
 type AuthLoginRes struct {
@@ -24,7 +23,7 @@ type AuthLoginRes struct {
 }
 
 type AuthRefreshTokenReq struct {
-	g.Meta `path:"/refresh_token" method:"post"`
+	g.Meta `path:"/api/refresh_token" method:"post"`
 }
 
 type AuthRefreshTokenRes struct {
@@ -33,9 +32,8 @@ type AuthRefreshTokenRes struct {
 }
 
 type AuthLogoutReq struct {
-	g.Meta `path:"/logout" method:"post"`
+	g.Meta `path:"/api/logout" method:"post"`
 }
 
 type AuthLogoutRes struct {
-	Result string
 }

@@ -120,9 +120,10 @@ func Authenticator(ctx context.Context) (interface{}, error) {
 }
 
 // 登录验证码
-func (s *sLogin) LoginCode(ctx context.Context) (Data *model.LoginCodeOutput, err error) {
+func (s *sLogin) LoginCode(ctx context.Context) (out string, err error) {
 	//作为测试先写死
-	testCode := "ASXSD"
-	Data = &model.LoginCodeOutput{Code: testCode}
-	return Data, nil
+	
+	out = "https://dummyimage.com/100x40/dcdfe6/000000.png&text=EASM"
+	
+	return out, nil
 }
