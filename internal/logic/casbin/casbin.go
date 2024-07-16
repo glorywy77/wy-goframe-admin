@@ -24,10 +24,12 @@ func init() {
 	service.RegisterCasbin(New())
 }
 
+// 这里规定一个casbin的错误响应
 func ErrReponse(r *ghttp.Request, err error) {
 	r.Response.WriteJson(g.Map{
-		"code":    401,
+		"code":    403,
 		"message": gconv.String(err),
+		"data":    nil,
 	})
 }
 
@@ -38,22 +40,20 @@ func (s *sCasbin) SelectRole(r *ghttp.Request) {
 	//Username, err := r.Session.Get("Username")
 
 	//方法二 由于之前拦截器已经附加了一些信息在r中,所以可以在直接取JWT_PAYLOAD
-	Payload := gconv.Map(r.Get("JWT_PAYLOAD"))
+	payload := gconv.Map(r.Get("JWT_PAYLOAD"))
 	// fmt.Printf("Payload: %v\n", Payload)
-	//获取用户名
-	Username := Payload["username"]
+	//获取用户权限
+
+	roles := payload["roles"]
+	username := payload["username"]
 	// fmt.Printf("Username: %v\n", Username)
 
-	if Username == nil || gconv.String(Username) == "" {
-		err := errors.New("鉴权失败，获取用户名为空")
+	if len(gconv.Map(roles)) == 0 {
+		err := errors.New("鉴权失败，获取用户权限为空")
 		g.Log().Errorf(ctx, "%v", err)
 		ErrReponse(r, err)
 		return
 	}
-
-	sub := gconv.String(Username)
-	obj := gconv.String(r.URL.Path)
-	act := gconv.String(r.Method)
 
 	//连接到数据库
 	adapter, err := xd.NewAdapter("mysql", "root:root@tcp(192.168.162.129:13306)/wy-goframe-admin?charset=utf8mb4", true)
@@ -72,17 +72,29 @@ func (s *sCasbin) SelectRole(r *ghttp.Request) {
 	}
 
 	//对鉴权结果进行判断
-	ok, err := e.Enforce(sub, obj, act)
-	if err != nil {
-		g.Log().Errorf(ctx, "鉴权出错: %v", err)
-		ErrReponse(r, err)
-		return
+	obj := gconv.String(r.URL.Path)
+	act := gconv.String(r.Method)
+	var hasRole bool
+	hasRole = false
+	for sub := range gconv.Map(roles) {
+		ok, err := e.Enforce(sub, obj, act)
+		if err != nil {
+			g.Log().Errorf(ctx, "鉴权出错: %v", err)
+			err = errors.New("鉴权出错")
+			ErrReponse(r, err)
+			return
+		}
+		if ok {
+			hasRole = true
+			break
+		}
 	}
-	if ok {
-		g.Log().Infof(ctx, "鉴权成功，用户有权限：%v", sub)
+
+	if hasRole {
+		g.Log().Infof(ctx, "鉴权成功，用户有权限：%v", username)
 		r.Middleware.Next()
 	} else {
-		g.Log().Errorf(ctx, "鉴权失败，用户无权限: %v", sub)
+		g.Log().Errorf(ctx, "鉴权失败，用户无权限: %v", username)
 		err = errors.New("鉴权失败，用户无权限")
 		ErrReponse(r, err)
 		return

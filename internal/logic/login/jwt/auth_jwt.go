@@ -3,10 +3,8 @@ package jwt
 import (
 	"context"
 	"crypto/rsa"
-	"fmt"
 	"io/ioutil"
 	"net/http"
-	"reflect"
 	"strings"
 	"time"
 
@@ -493,9 +491,8 @@ func (mw *GfJWTMiddleware) GetPayload(ctx context.Context) map[string]interface{
 	r := g.RequestFromCtx(ctx)
 	token := r.Get(PayloadKey)
 	if len(gconv.String(token)) == 0 {
-		return make(map[string]interface{})  // 返回一个空的 map
+		return make(map[string]interface{}) // 返回一个空的 map
 	}
-	fmt.Printf("reflect.TypeOf(token): %v\n", reflect.TypeOf(token))
 	return gconv.Map(token)
 }
 

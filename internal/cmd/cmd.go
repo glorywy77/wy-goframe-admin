@@ -29,7 +29,6 @@ var (
 
 				group.Bind(
 					controller.Login,
-					
 				)
 
 				// Special handler that needs authentication.

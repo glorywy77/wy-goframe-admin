@@ -53,7 +53,7 @@ func (s *sLogin) Auth() *jwt.GfJWTMiddleware {
 		Key:             []byte("secret key11"),
 		Timeout:         time.Hour * 24,
 		MaxRefresh:      time.Hour * 24,
-		IdentityKey:     "id",
+		IdentityKey:     "userid",
 		TokenLookup:     "header: Authorization, query: token, cookie: jwt",
 		TokenHeadName:   "Bearer",
 		TimeFunc:        time.Now,

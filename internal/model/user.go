@@ -10,30 +10,60 @@ type UserLoginInput struct {
 	Password string
 }
 
+// type UserSaveInput struct {
+// 	Id       int
+// 	UserName string
+// 	Password string `json:"Password,omitempty"` //允许不传入password字段
+// 	Email    string
+// 	Roles    g.Slice
+// 	Enable   int
+// 	Remark   string
+// }
+
+// type UserSaveOutput struct {
+// 	Result string
+// }
+
 type UserCreateInput struct {
+	UserId   string
 	UserName string
 	Password string
 	Email    string
 	Roles    g.Slice
 	Enable   int
+	Remark   string
 }
 
-type UserCreateOutput struct {
-	Result string
+type UserUpdateInput struct {
+	Id       int
+	UserId   string
+	UserName string
+	Email    string
+	Roles    g.Slice
+	Enable   int
+	Remark   string
+}
+
+type UserResetPassInput struct {
+	UserId   string
+	UserName string
+	Password string
 }
 
 type UserPageInput struct {
-	UserName string
-	Size     int
-	Page     int
+	UserName    string
+	PageSize    int
+	CurrentPage int
 }
 
 type UserPageOutput struct {
-	UserName  string
-	Email     string
-	Roles     g.Slice
-	Enable    int
-	Create_at *gtime.Time
-	Update_at *gtime.Time
-	Remark    string
+	Id        int         `json:"id"`
+	UserId    string      `json:"userid"`
+	UserName  string      `json:"username"`
+	Email     string      `json:"email"`
+	Roles     g.Slice     `json:"roles"`
+	Enable    int         `json:"enable"`
+	Create_at *gtime.Time `json:"create_at"`
+	Update_at *gtime.Time `json:"update_at"`
+	Remark    string      `json:"remark"`
 }

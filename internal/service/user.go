@@ -14,6 +14,8 @@ type (
 	IUser interface {
 		UserCheck(ctx context.Context, in model.UserLoginInput) (userMap map[string]interface{})
 		UserCreate(ctx context.Context, in model.UserCreateInput) (err error)
+		UserUpdate(ctx context.Context, in model.UserUpdateInput) (err error)
+		UserResetPass(ctx context.Context, in model.UserResetPassInput) (err error)
 		UserPage(ctx context.Context, in model.UserPageInput) (out []*model.UserPageOutput, total int, err error)
 	}
 )

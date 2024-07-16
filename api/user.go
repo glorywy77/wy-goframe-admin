@@ -11,21 +11,48 @@ type UserGetInfoReq struct {
 }
 
 type UserGetInfoRes struct {
-	Id          int    `json:"id"`
+	UserId      string    `json:"userid"`
 	IdentityKey string `json:"identity_key"`
-	Payload     g.Map `json:"payload"`
+	Payload     g.Map  `json:"payload"`
 }
 
 type UserCreateReq struct {
-	g.Meta   `path:"/api/user/create" method:"post"  tags:"UserService" summary:"创建用户"`
-	UserName string  `v:"required"`
-	Password string  `v:"required|length:6,30#请输入密码|密码长度不够"`
+	g.Meta   `path:"/api/user/create" method:"post,put"  tags:"UserService" summary:"保存用户"`
+	UserName string  `v:"required" `
+	Password string  `v:"required|length:6,30#密码长度不够" `
 	Email    string  `v:"required"`
-	Roles    g.Slice `v:"required"`
+	Roles    g.Slice `d:"dev" v:"required"`
 	Enable   int     `d:"0" v:"required"  dc:"用户准入默认为0允许"`
+	Remark   string  `dc:"备注"`
 }
 
 type UserCreateRes struct {
+	Result string `json:"result"`
+}
+
+type UserUpdateReq struct {
+	g.Meta   `path:"/api/user/update" method:"post,put"  tags:"UserService" summary:"保存用户"`
+	Id       int     `v:"required" dc:"ID"`
+	UserId   string  `v:"required" dc:"用户ID"`
+	UserName string  `v:"required" `
+	Email    string  `v:"required"`
+	Roles    g.Slice `d:"dev" v:"required"`
+	Enable   int     `d:"0" v:"required"  dc:"用户准入默认为0允许"`
+	Remark   string  `dc:"备注"`
+}
+
+type UserUpdateRes struct {
+	Result string `json:"result"`
+}
+
+type UserResetPassReq struct {
+	g.Meta   `path:"/api/user/resetPass" method:"put"  tags:"UserService" summary:"重置密码"`
+	UserId   string `v:"required" dc:"用户ID"`
+	UserName string `v:"required" `
+	Password string `v:"required length:6,30#密码长度不够" `
+}
+
+type UserResetPassRes struct {
 	Result string `json:"result"`
 }
 
@@ -38,5 +65,5 @@ type UserPageReq struct {
 type UserPageRes struct {
 	CommonPaginationReq
 	CommonPaginationRes
-	Items []*model.UserPageOutput
+	Items []*model.UserPageOutput `json:"items"`
 }
