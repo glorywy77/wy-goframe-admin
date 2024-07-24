@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"errors"
 	"math/rand"
 	"time"
 	"wy-goframe-admin/api"
@@ -34,17 +35,12 @@ func GenerateUserID() string {
 	src := rand.NewSource(time.Now().UnixNano())
 	// 创建一个新的随机数生成器
 	r := rand.New(src)
-	const letterRunes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	const digitRunes = "0123456789"
-	var letters [3]byte
-	for i := range letters {
-		letters[i] = letterRunes[r.Intn(len(letterRunes))]
+	const allowedChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	var x [8]byte
+	for i := range x {
+		x[i] = allowedChars[r.Intn(len(allowedChars))]
 	}
-	var digits [5]byte
-	for i := range digits {
-		digits[i] = digitRunes[r.Intn(len(digitRunes))]
-	}
-	return string(digits[:]) + string(letters[:])
+	return string(x[:])
 }
 
 // 创建新用户
@@ -78,7 +74,6 @@ func (c *userController) Update(ctx context.Context, req *api.UserUpdateReq) (re
 	g.DumpJson(req)
 	err = service.User().UserUpdate(ctx, model.UserUpdateInput{
 		Id:       req.Id,
-		UserId:   req.UserId,
 		UserName: req.UserName,
 		Email:    req.Email,
 		Roles:    req.Roles,
@@ -102,7 +97,7 @@ func (c *userController) ResetPass(ctx context.Context, req *api.UserResetPassRe
 	}
 	Password := gconv.String(hashedPassword)
 	err = service.User().UserResetPass(ctx, model.UserResetPassInput{
-		UserId:   req.UserId,
+		Id:       req.Id,
 		UserName: req.UserName,
 		Password: Password,
 	})
@@ -112,13 +107,14 @@ func (c *userController) ResetPass(ctx context.Context, req *api.UserResetPassRe
 	res = &api.UserResetPassRes{
 		Result: "用户重置密码成功",
 	}
-	return res, nil
+	return
 }
 
 // 分页返回用户信息
 func (c *userController) Page(ctx context.Context, req *api.UserPageReq) (res *api.UserPageRes, err error) {
 	data, total, err := service.User().UserPage(ctx, model.UserPageInput{
 		UserName:    req.UserName,
+		Email:       req.Email,
 		CurrentPage: req.CurrentPage,
 		PageSize:    req.PageSize,
 	})
@@ -134,6 +130,30 @@ func (c *userController) Page(ctx context.Context, req *api.UserPageReq) (res *a
 			Total: total,
 		},
 		Items: data,
+	}
+	return
+}
+
+// 用户删除
+func (c *userController) Delete(ctx context.Context, req *api.UserDeleteReq) (res *api.UserDeleteRes, err error) {
+	if req.UserName == "admin" {
+		res = &api.UserDeleteRes{
+			Result: "admin用户禁止删除",
+		}
+		err = errors.New("admin用户禁止删除")
+    g.Log().Errorf(ctx, "admin用户禁止删除")
+
+	} else {
+		err = service.User().UserDelete(ctx, model.UserDeleteInput{
+			Id:       req.Id,
+			UserName: req.UserName,
+		})
+		if err != nil {
+			return nil, err
+		}
+		res = &api.UserDeleteRes{
+			Result: "用户删除成功",
+		}
 	}
 	return
 }

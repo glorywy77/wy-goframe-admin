@@ -14,7 +14,7 @@ type LoginCodeRes struct {
 }
 
 type AuthLoginReq struct {
-	g.Meta `path:"/api/login" method:"post"`
+	g.Meta `path:"/api/login" tags:"LoginService" method:"post"`
 }
 
 type AuthLoginRes struct {
@@ -23,7 +23,7 @@ type AuthLoginRes struct {
 }
 
 type AuthRefreshTokenReq struct {
-	g.Meta `path:"/api/refresh_token" method:"post"`
+	g.Meta `path:"/api/refresh_token" tags:"LoginService"  method:"post"`
 }
 
 type AuthRefreshTokenRes struct {
@@ -32,7 +32,7 @@ type AuthRefreshTokenRes struct {
 }
 
 type AuthLogoutReq struct {
-	g.Meta `path:"/api/logout" method:"post"`
+	g.Meta `path:"/api/logout" tags:"LoginService" method:"post"`
 }
 
 type AuthLogoutRes struct {

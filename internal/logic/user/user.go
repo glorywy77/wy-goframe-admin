@@ -25,34 +25,11 @@ func init() {
 	service.RegisterUser(New())
 }
 
-// 通过用户名核密码查询用户是否存在，这部分是jwt的源码原本是写死的，改写了下通过数据库查
+// UserCheck 用户登录校验
 func (s *sUser) UserCheck(ctx context.Context, in model.UserLoginInput) (userMap map[string]interface{}) {
 
-	// if in.UserName == "admin" && in.Password == "admin" {
-	// 	return g.Map{
-	// 		"id":       1,
-	// 		"username": "admin",
-	// 	}
-	// }
-	// return nil
-
-	//查询用户是否已经被屏蔽
-	m := dao.User.Ctx(ctx)
-	enable, err := m.Fields("enable").Where("username", in.UserName).Value()
-	if err != nil {
-		return nil
-	}
-
-	if gconv.Int(enable) == 1 {
-		//通过ctx获取到r
-		r := g.RequestFromCtx(ctx)
-		r.Response.WriteJson(g.Map{
-			"code":    401,
-			"message": "用户已屏蔽，请联系管理员",
-		})
-	}
-
 	//校验密码是否正确
+	m := dao.User.Ctx(ctx)
 	hashedPassword, err := m.Fields("password").Where("username", in.UserName).Value()
 	if err != nil {
 		return nil
@@ -70,19 +47,20 @@ func (s *sUser) UserCheck(ctx context.Context, in model.UserLoginInput) (userMap
 		return nil
 	}
 
-	//查询用户信息
+	//查询当前登录用户信息
 	type User struct {
-		UserId   string     `json:"userid"`
+		UserId   string  `json:"userid"`
 		Username string  `json:"username"`
 		Roles    g.Slice `json:"roles"`
+		Enable   int     `json:"enable"`
 	}
 	user := User{}
-	err = m.Fields("userid,username,roles").Where("username", in.UserName).Scan(&user)
+	err = m.Fields("userid,username,roles,enable").Where("username", in.UserName).Scan(&user)
 	if err != nil {
 		return nil
 	}
 	userMap = gconv.Map(user)
-	g.Dump(userMap)
+	// g.Dump(userMap)
 
 	return userMap
 }
@@ -98,29 +76,46 @@ func (s *sUser) UserCreate(ctx context.Context, in model.UserCreateInput) (err e
 	return
 }
 
-// 更新用户
+// 更新用户基础信息,不修改密码
 func (s *sUser) UserUpdate(ctx context.Context, in model.UserUpdateInput) (err error) {
-	_, err = dao.User.Ctx(ctx).Data(in).Where("userid", in.UserId).Save()
+	_, err = dao.User.Ctx(ctx).Data("email", in.Email, "roles", in.Roles, "enable", in.Enable, "remark", in.Remark).
+		Where("id", in.Id).
+		Where("username", in.UserName).
+		Update()
 	return
 }
 
-//重置用户密码
+// 重置用户密码
 func (s *sUser) UserResetPass(ctx context.Context, in model.UserResetPassInput) (err error) {
-	_, err = dao.User.Ctx(ctx).Data(in).Update()
+	_, err = dao.User.Ctx(ctx).Data("password", in.Password).
+		Where("id", in.Id).
+		Where("username", in.UserName).
+		Update()
 	return
 }
-
-
 
 // 分页返回用户信息
 func (s *sUser) UserPage(ctx context.Context, in model.UserPageInput) (out []*model.UserPageOutput, total int, err error) {
 	m := dao.User.Ctx(ctx)
-	err = m.Fields(`id,userid,username,email,roles,enable,create_at,update_at,remark`).WhereLike("username", "%"+in.UserName).OrderAsc("id").Limit((in.CurrentPage-1)*in.PageSize, in.PageSize).ScanAndCount(&out, &total, false)
+	err = m.Fields(`id,userid,username,email,roles,enable,create_at,update_at,remark`).
+		WhereLike("username", "%"+in.UserName+"%").
+		WhereLike("email", "%"+in.Email+"%").
+		OrderAsc("id").Limit((in.CurrentPage-1)*in.PageSize, in.PageSize).
+		ScanAndCount(&out, &total, false)
 
 	if err != nil {
 		return nil, 0, err
 	}
-
 	return out, total, nil
 
+}
+
+
+// 删除用户
+func (s *sUser) UserDelete(ctx context.Context, in model.UserDeleteInput) (err error) {
+	_, err = dao.User.Ctx(ctx).
+	Where("id", in.Id).
+	Where("username", in.UserName).
+	Delete()
+	return
 }

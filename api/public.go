@@ -11,3 +11,9 @@ type CommonPaginationReq struct {
 type CommonPaginationRes struct {
 	Total int `dc:"总数" json:"total"`
 }
+
+
+
+type CommonResultRes struct {
+	Result string `json:"result"`
+}

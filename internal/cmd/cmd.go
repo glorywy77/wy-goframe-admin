@@ -3,9 +3,7 @@ package cmd
 import (
 	"context"
 	"wy-goframe-admin/internal/controller"
-	"wy-goframe-admin/internal/controller/hello"
 	"wy-goframe-admin/internal/service"
-
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gcmd"
@@ -37,16 +35,13 @@ var (
 						service.Middelware().Auth,
 						service.Middelware().Casbin,
 					)
-					// group.ALLMap(g.Map{
-					// 	"/user/info": controller.User.Info,
-					// })
+
 					group.Bind(
-						hello.New(),
 						controller.User,
+						controller.Casbin,
 					)
 				})
 			})
-
 			s.Run()
 			return nil
 		},

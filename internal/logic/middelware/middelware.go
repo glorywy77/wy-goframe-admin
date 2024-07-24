@@ -33,6 +33,6 @@ func (s *sMiddelware) Session(r *ghttp.Request) {
 }
 
 func (s *sMiddelware) Casbin(r *ghttp.Request) {
-	service.Casbin().SelectRole(r)
+	service.Casbin().RoleCheck(r)
 
 }

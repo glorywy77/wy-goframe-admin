@@ -29,7 +29,6 @@ type CasbinRuleColumns struct {
 	V4      string //
 	V5      string //
 	Summary string // 接口的概要信息
-	Ptype   string //
 }
 
 // casbinRuleColumns holds the columns for table casbin_rule.
@@ -43,7 +42,6 @@ var casbinRuleColumns = CasbinRuleColumns{
 	V4:      "v4",
 	V5:      "v5",
 	Summary: "summary",
-	Ptype:   "ptype",
 }
 
 // NewCasbinRuleDao creates and returns a new DAO object for table data access.

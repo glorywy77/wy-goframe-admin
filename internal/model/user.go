@@ -36,7 +36,6 @@ type UserCreateInput struct {
 
 type UserUpdateInput struct {
 	Id       int
-	UserId   string
 	UserName string
 	Email    string
 	Roles    g.Slice
@@ -45,13 +44,14 @@ type UserUpdateInput struct {
 }
 
 type UserResetPassInput struct {
-	UserId   string
+	Id       int
 	UserName string
 	Password string
 }
 
 type UserPageInput struct {
 	UserName    string
+	Email       string
 	PageSize    int
 	CurrentPage int
 }
@@ -66,4 +66,9 @@ type UserPageOutput struct {
 	Create_at *gtime.Time `json:"create_at"`
 	Update_at *gtime.Time `json:"update_at"`
 	Remark    string      `json:"remark"`
+}
+
+type UserDeleteInput struct {
+	Id       int
+	UserName string
 }

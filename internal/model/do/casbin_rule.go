@@ -20,5 +20,4 @@ type CasbinRule struct {
 	V4      interface{} //
 	V5      interface{} //
 	Summary interface{} // 接口的概要信息
-	Ptype   interface{} //
 }

@@ -9,5 +9,6 @@ import (
 	_ "wy-goframe-admin/internal/logic/login"
 	_ "wy-goframe-admin/internal/logic/middelware"
 	_ "wy-goframe-admin/internal/logic/session"
+	_ "wy-goframe-admin/internal/logic/sys_api"
 	_ "wy-goframe-admin/internal/logic/user"
 )

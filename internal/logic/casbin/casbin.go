@@ -1,7 +1,10 @@
 package casbin
 
 import (
+	"context"
 	"errors"
+	"wy-goframe-admin/internal/dao"
+	"wy-goframe-admin/internal/model"
 	"wy-goframe-admin/internal/service"
 
 	"github.com/casbin/casbin/v2"
@@ -33,7 +36,8 @@ func ErrReponse(r *ghttp.Request, err error) {
 	})
 }
 
-func (s *sCasbin) SelectRole(r *ghttp.Request) {
+// RoleCheck用于查询和校验用户权限
+func (s *sCasbin) RoleCheck(r *ghttp.Request) {
 	// fmt.Printf("r: %v\n", *r)
 	ctx := r.GetCtx()
 	//方法一 在先在session中去加然后再session中去取
@@ -41,7 +45,7 @@ func (s *sCasbin) SelectRole(r *ghttp.Request) {
 
 	//方法二 由于之前拦截器已经附加了一些信息在r中,所以可以在直接取JWT_PAYLOAD
 	payload := gconv.Map(r.Get("JWT_PAYLOAD"))
-	// fmt.Printf("Payload: %v\n", Payload)
+	// g.Dump(payload)
 	//获取用户权限
 
 	roles := payload["roles"]
@@ -49,7 +53,7 @@ func (s *sCasbin) SelectRole(r *ghttp.Request) {
 	// fmt.Printf("Username: %v\n", Username)
 
 	if len(gconv.Map(roles)) == 0 {
-		err := errors.New("鉴权失败，获取用户权限为空")
+		err := errors.New("鉴权失败,获取用户权限为空")
 		g.Log().Errorf(ctx, "%v", err)
 		ErrReponse(r, err)
 		return
@@ -82,7 +86,6 @@ func (s *sCasbin) SelectRole(r *ghttp.Request) {
 			g.Log().Errorf(ctx, "鉴权出错: %v", err)
 			err = errors.New("鉴权出错")
 			ErrReponse(r, err)
-			return
 		}
 		if ok {
 			hasRole = true
@@ -91,13 +94,42 @@ func (s *sCasbin) SelectRole(r *ghttp.Request) {
 	}
 
 	if hasRole {
-		g.Log().Infof(ctx, "鉴权成功，用户有权限：%v", username)
+		g.Log().Infof(ctx, "鉴权成功,<用户:%v> <权限:%v> <接口:%v> <方法:%v>", username, roles, obj, act)
 		r.Middleware.Next()
 	} else {
-		g.Log().Errorf(ctx, "鉴权失败，用户无权限: %v", username)
-		err = errors.New("鉴权失败，用户无权限")
+		g.Log().Errorf(ctx, "鉴权失败,<用户:%v> <权限:%v> <接口:%v> <方法:%v>", username, roles, obj, act)
+		err = errors.New("鉴权失败,用户无权限")
 		ErrReponse(r, err)
 		return
 	}
 
+}
+
+// 保存和新增权限规则
+func (s *sCasbin) RuleSave(ctx context.Context, in model.CasbinRuleSaveInput) (err error) {
+	_, err = dao.CasbinRule.Ctx(ctx).Data(in).Save()
+	return
+}
+
+// 分页展示所有权限规则
+func (s *sCasbin) RulePage(ctx context.Context, in model.CasbinRulePageInput) (out []*model.CasbinRulePageOutput, total int, err error) {
+	m := dao.CasbinRule.Ctx(ctx)
+	err = m.Fields(`id,p_type,v0,v1,v2,v3,v4,v5,summary`).
+		WhereLike("v0", "%"+in.V0+"%").
+		WhereLike("v1", "%"+in.V1+"%").
+		WhereLike("v2", "%"+in.V2+"%").
+		OrderAsc("v0,id").Limit((in.CurrentPage-1)*in.PageSize, in.PageSize).
+		ScanAndCount(&out, &total, false)
+
+	if err != nil {
+		return nil, 0, err
+	}
+	return out, total, nil
+
+}
+
+// 删除权限规则
+func (s *sCasbin) RuleDelete(ctx context.Context, in model.CasbinRuleDeleteInput) (err error) {
+	_, err = dao.CasbinRule.Ctx(ctx).Where("id", in.Id).Delete()
+	return
 }

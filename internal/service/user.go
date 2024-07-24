@@ -17,6 +17,7 @@ type (
 		UserUpdate(ctx context.Context, in model.UserUpdateInput) (err error)
 		UserResetPass(ctx context.Context, in model.UserResetPassInput) (err error)
 		UserPage(ctx context.Context, in model.UserPageInput) (out []*model.UserPageOutput, total int, err error)
+		UserDelete(ctx context.Context, in model.UserDeleteInput) (err error)
 	}
 )
 

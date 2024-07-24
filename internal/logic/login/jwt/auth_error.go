@@ -18,6 +18,9 @@ var (
 	// ErrFailedAuthentication indicates authentication failed, could be faulty username or password
 	ErrFailedAuthentication = errors.New("incorrect Username or Password")
 
+	//当用户被屏蔽时候
+	ErrFailedEnable = errors.New("用户已屏蔽，请联系管理员")
+
 	// ErrFailedTokenCreation indicates JWT Token failed to create, reason unknown
 	ErrFailedTokenCreation = errors.New("failed to create JWT Token")
 
