@@ -94,10 +94,10 @@ func (s *sCasbin) RoleCheck(r *ghttp.Request) {
 	}
 
 	if hasRole {
-		g.Log().Infof(ctx, "鉴权成功,<用户:%v> <权限:%v> <接口:%v> <方法:%v>", username, roles, obj, act)
+		g.Log().Infof(ctx, "鉴权成功,<用户:%v> <角色:%v> <接口:%v> <方法:%v>", username, roles, obj, act)
 		r.Middleware.Next()
 	} else {
-		g.Log().Errorf(ctx, "鉴权失败,<用户:%v> <权限:%v> <接口:%v> <方法:%v>", username, roles, obj, act)
+		g.Log().Errorf(ctx, "鉴权失败,<用户:%v> <角色:%v> <接口:%v> <方法:%v>", username, roles, obj, act)
 		err = errors.New("鉴权失败,用户无权限")
 		ErrReponse(r, err)
 		return

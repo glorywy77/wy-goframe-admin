@@ -11,66 +11,62 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 )
 
-// SysApiDao is the data access object for table sys_api.
-type SysApiDao struct {
-	table   string        // table is the underlying table name of the DAO.
-	group   string        // group is the database configuration group name of current DAO.
-	columns SysApiColumns // columns contains all the column names of Table for convenient usage.
+// SysRoleDao is the data access object for table sys_role.
+type SysRoleDao struct {
+	table   string         // table is the underlying table name of the DAO.
+	group   string         // group is the database configuration group name of current DAO.
+	columns SysRoleColumns // columns contains all the column names of Table for convenient usage.
 }
 
-// SysApiColumns defines and stores column names for table sys_api.
-type SysApiColumns struct {
+// SysRoleColumns defines and stores column names for table sys_role.
+type SysRoleColumns struct {
 	Id          string //
-	Path        string // api路径
-	Method      string // 方法
-	ApiGroup    string // api组
-	Description string // api中文描述
+	Role        string //
+	Description string //
 	CreateAt    string //
 	UpdateAt    string //
 }
 
-// sysApiColumns holds the columns for table sys_api.
-var sysApiColumns = SysApiColumns{
+// sysRoleColumns holds the columns for table sys_role.
+var sysRoleColumns = SysRoleColumns{
 	Id:          "id",
-	Path:        "path",
-	Method:      "method",
-	ApiGroup:    "api_group",
+	Role:        "role",
 	Description: "description",
 	CreateAt:    "create_at",
 	UpdateAt:    "update_at",
 }
 
-// NewSysApiDao creates and returns a new DAO object for table data access.
-func NewSysApiDao() *SysApiDao {
-	return &SysApiDao{
+// NewSysRoleDao creates and returns a new DAO object for table data access.
+func NewSysRoleDao() *SysRoleDao {
+	return &SysRoleDao{
 		group:   "default",
-		table:   "sys_api",
-		columns: sysApiColumns,
+		table:   "sys_role",
+		columns: sysRoleColumns,
 	}
 }
 
 // DB retrieves and returns the underlying raw database management object of current DAO.
-func (dao *SysApiDao) DB() gdb.DB {
+func (dao *SysRoleDao) DB() gdb.DB {
 	return g.DB(dao.group)
 }
 
 // Table returns the table name of current dao.
-func (dao *SysApiDao) Table() string {
+func (dao *SysRoleDao) Table() string {
 	return dao.table
 }
 
 // Columns returns all column names of current dao.
-func (dao *SysApiDao) Columns() SysApiColumns {
+func (dao *SysRoleDao) Columns() SysRoleColumns {
 	return dao.columns
 }
 
 // Group returns the configuration group name of database of current dao.
-func (dao *SysApiDao) Group() string {
+func (dao *SysRoleDao) Group() string {
 	return dao.group
 }
 
 // Ctx creates and returns the Model for current DAO, It automatically sets the context for current operation.
-func (dao *SysApiDao) Ctx(ctx context.Context) *gdb.Model {
+func (dao *SysRoleDao) Ctx(ctx context.Context) *gdb.Model {
 	return dao.DB().Model(dao.table).Safe().Ctx(ctx)
 }
 
@@ -80,6 +76,6 @@ func (dao *SysApiDao) Ctx(ctx context.Context) *gdb.Model {
 //
 // Note that, you should not Commit or Rollback the transaction in function f
 // as it is automatically handled by this function.
-func (dao *SysApiDao) Transaction(ctx context.Context, f func(ctx context.Context, tx gdb.TX) error) (err error) {
+func (dao *SysRoleDao) Transaction(ctx context.Context, f func(ctx context.Context, tx gdb.TX) error) (err error) {
 	return dao.Ctx(ctx).Transaction(ctx, f)
 }

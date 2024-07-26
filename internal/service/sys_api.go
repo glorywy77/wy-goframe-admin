@@ -13,6 +13,8 @@ import (
 type (
 	ISysApi interface {
 		ApiSave(ctx context.Context, in model.SysApiSaveInput) (err error)
+		ApiPage(ctx context.Context, in model.SysApiPageInput) (out []*model.SysApiPageOutput, total int, err error)
+		ApiDelete(ctx context.Context, in model.SysApiDeleteInput) (err error)
 	}
 )
 

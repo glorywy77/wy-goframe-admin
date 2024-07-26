@@ -12,10 +12,9 @@ import (
 type SysApi struct {
 	Id          int64       `json:"id"          description:""`
 	Path        string      `json:"path"        description:"api路径"`
-	Description string      `json:"description" description:"api中文描述"`
-	ApiGroup    string      `json:"apiGroup"    description:"api组"`
 	Method      string      `json:"method"      description:"方法"`
-	CreatedAt   *gtime.Time `json:"createdAt"   description:""`
-	UpdatedAt   *gtime.Time `json:"updatedAt"   description:""`
-	DeletedAt   *gtime.Time `json:"deletedAt"   description:""`
+	ApiGroup    string      `json:"apiGroup"    description:"api组"`
+	Description string      `json:"description" description:"api中文描述"`
+	CreateAt    *gtime.Time `json:"createAt"    description:""`
+	UpdateAt    *gtime.Time `json:"updateAt"    description:""`
 }

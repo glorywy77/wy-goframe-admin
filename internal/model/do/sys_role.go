@@ -9,14 +9,12 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
-// SysApi is the golang structure of table sys_api for DAO operations like Where/Data.
-type SysApi struct {
-	g.Meta      `orm:"table:sys_api, do:true"`
+// SysRole is the golang structure of table sys_role for DAO operations like Where/Data.
+type SysRole struct {
+	g.Meta      `orm:"table:sys_role, do:true"`
 	Id          interface{} //
-	Path        interface{} // api路径
-	Method      interface{} // 方法
-	ApiGroup    interface{} // api组
-	Description interface{} // api中文描述
+	Role        interface{} //
+	Description interface{} //
 	CreateAt    *gtime.Time //
 	UpdateAt    *gtime.Time //
 }

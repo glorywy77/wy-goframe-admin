@@ -3,12 +3,32 @@ package model
 import "github.com/gogf/gf/v2/os/gtime"
 
 type SysApiSaveInput struct {
-	Id          int64
+	Id          int 
 	Path        string
-	Description string
-	ApiGroup    string
 	Method      string
+	ApiGroup    string
+	Description string
 	CreatedAt   *gtime.Time
 	UpdatedAt   *gtime.Time
-	DeletedAt   *gtime.Time
 }
+
+type SysApiPageInput struct {
+	Id          int
+	Path        string
+	ApiGroup    string
+	Method      string
+	PageSize    int
+	CurrentPage int
+}
+
+type SysApiPageOutput struct {
+	Id          int         `json:"id"`
+	Path        string      `dc:"api路径" json:"path"`
+	Method      string      `dc:"api方法" json:"method"`
+	ApiGroup    string      `dc:"api接口组" json:"apiGroup"`
+	Description string      `dc:"api接口描述" json:"description"`
+	CreateAt    *gtime.Time `json:"createAt"`
+	UpdateAt    *gtime.Time `json:"updateAt"`
+}
+
+type SysApiDeleteInput struct{ Id int }

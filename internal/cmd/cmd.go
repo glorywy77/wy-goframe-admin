@@ -39,6 +39,8 @@ var (
 					group.Bind(
 						controller.User,
 						controller.Casbin,
+						controller.SysApi,
+						controller.SysRole,
 					)
 				})
 			})

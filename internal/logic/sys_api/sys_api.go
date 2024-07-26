@@ -27,3 +27,25 @@ func (s *sSysApi) ApiSave(ctx context.Context, in model.SysApiSaveInput) (err er
 	return
 }
 
+// 分页展示
+func (s *sSysApi) ApiPage(ctx context.Context, in model.SysApiPageInput) (out []*model.SysApiPageOutput, total int, err error) {
+	m := dao.SysApi.Ctx(ctx)
+	err = m.Fields(`id,path,method,api_group,description,create_at,update_at`).
+		WhereLike("path", "%"+in.Path+"%").
+		WhereLike("method", "%"+in.Method+"%").
+		WhereLike("api_group", "%"+in.ApiGroup+"%").
+		OrderAsc("api_group,id,path").Limit((in.CurrentPage-1)*in.PageSize, in.PageSize).
+		ScanAndCount(&out, &total, false)
+
+	if err != nil {
+		return nil, 0, err
+	}
+	return out, total, nil
+
+}
+
+// 删
+func (s *sSysApi) ApiDelete(ctx context.Context, in model.SysApiDeleteInput) (err error) {
+	_, err = dao.SysApi.Ctx(ctx).Where("id", in.Id).Delete()
+	return
+}

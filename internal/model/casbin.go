@@ -1,7 +1,7 @@
 package model
 
 type CasbinRuleSaveInput struct {
-	Id      int `json:"id,omitempty"` //新增用户时候Id为空
+	Id      int `json:"id,omitempty"` //新增时候Id为空
 	P_type  string
 	V0      string
 	V1      string
