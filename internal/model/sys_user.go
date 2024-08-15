@@ -5,14 +5,15 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
-type UserLoginInput struct {
+type SysUserLoginInput struct {
 	UserName string
 	Password string
+	Code     string
 }
 
-// type UserSaveInput struct {
+// type SysUserSaveInput struct {
 // 	Id       int
-// 	UserName string
+// 	SysUserName string
 // 	Password string `json:"Password,omitempty"` //允许不传入password字段
 // 	Email    string
 // 	Roles    g.Slice
@@ -20,11 +21,11 @@ type UserLoginInput struct {
 // 	Remark   string
 // }
 
-// type UserSaveOutput struct {
+// type SysUserSaveOutput struct {
 // 	Result string
 // }
 
-type UserCreateInput struct {
+type SysUserCreateInput struct {
 	UserId   string
 	UserName string
 	Password string
@@ -34,7 +35,7 @@ type UserCreateInput struct {
 	Remark   string
 }
 
-type UserUpdateInput struct {
+type SysUserUpdateInput struct {
 	Id       int
 	UserName string
 	Email    string
@@ -43,20 +44,20 @@ type UserUpdateInput struct {
 	Remark   string
 }
 
-type UserResetPassInput struct {
-	Id       int
+type SysUserResetPassInput struct {
+	Id          int
 	UserName string
-	Password string
+	Password    string
 }
 
-type UserPageInput struct {
+type SysUserPageInput struct {
 	UserName    string
 	Email       string
 	PageSize    int
 	CurrentPage int
 }
 
-type UserPageOutput struct {
+type SysUserPageOutput struct {
 	Id        int         `json:"id"`
 	UserId    string      `json:"userid"`
 	UserName  string      `json:"username"`
@@ -68,7 +69,7 @@ type UserPageOutput struct {
 	Remark    string      `json:"remark"`
 }
 
-type UserDeleteInput struct {
+type SysUserDeleteInput struct {
 	Id       int
 	UserName string
 }

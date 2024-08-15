@@ -2,7 +2,6 @@ package middelware
 
 import (
 	"wy-goframe-admin/internal/service"
-
 	"github.com/gogf/gf/v2/net/ghttp"
 )
 
@@ -34,5 +33,8 @@ func (s *sMiddelware) Session(r *ghttp.Request) {
 
 func (s *sMiddelware) Casbin(r *ghttp.Request) {
 	service.Casbin().RoleCheck(r)
+}
 
+func (s *sMiddelware) AuditLog(r *ghttp.Request) {
+	service.AuditLog().Save(r)
 }

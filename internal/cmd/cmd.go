@@ -4,9 +4,11 @@ import (
 	"context"
 	"wy-goframe-admin/internal/controller"
 	"wy-goframe-admin/internal/service"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gcmd"
+	"github.com/gogf/gf/v2/os/gsession"
 )
 
 var (
@@ -16,7 +18,9 @@ var (
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
+			s.SetSessionStorage(gsession.NewStorageMemory())
 			s.Group("/", func(group *ghttp.RouterGroup) {
+
 				group.Middleware(
 					ghttp.MiddlewareHandlerResponse,
 					ghttp.MiddlewareCORS,
@@ -32,15 +36,17 @@ var (
 				// Special handler that needs authentication.
 				group.Group("/", func(group *ghttp.RouterGroup) {
 					group.Middleware(
+						service.Middelware().AuditLog,
 						service.Middelware().Auth,
 						service.Middelware().Casbin,
+						
 					)
 
 					group.Bind(
-						controller.User,
-						controller.Casbin,
+						controller.SysUser,
 						controller.SysApi,
 						controller.SysRole,
+						controller.AuditLog,
 					)
 				})
 			})

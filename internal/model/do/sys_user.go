@@ -9,9 +9,9 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
-// User is the golang structure of table user for DAO operations like Where/Data.
-type User struct {
-	g.Meta   `orm:"table:user, do:true"`
+// SysUser is the golang structure of table sys_user for DAO operations like Where/Data.
+type SysUser struct {
+	g.Meta   `orm:"table:sys_user, do:true"`
 	Id       interface{} //
 	Userid   interface{} //
 	Username interface{} //

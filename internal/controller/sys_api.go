@@ -33,6 +33,7 @@ func (c *sysApiController) Page(ctx context.Context, req *api.SysApiPageReq) (re
 		},
 		Items: data,
 	}
+
 	return
 }
 
@@ -52,8 +53,18 @@ func (c *sysApiController) Save(ctx context.Context, req *api.SysApiSaveReq) (re
 // 删除权限规则
 func (c *sysApiController) Delete(ctx context.Context, req *api.SysApiDeleteReq) (res *api.CommonResultRes, err error) {
 	err = service.SysApi().ApiDelete(ctx, model.SysApiDeleteInput{
-		Id: req.Id,
+		Path:   req.Path,
+		Method: req.Method,
 	})
 	res = &api.CommonResultRes{Result: "删除成功"}
+	return
+}
+
+func (c *sysApiController) ApiGroupsList(ctx context.Context, req *api.SysApiGroupsListReq) (res *api.SysApiGroupsListRes, err error) {
+	out, err := service.SysApi().ApiGroupsList(ctx, model.SysApiGroupsListInput{})
+	if err != nil {
+		return nil, err
+	}
+	res = &api.SysApiGroupsListRes{Items: out}
 	return
 }

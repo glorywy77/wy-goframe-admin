@@ -2,6 +2,7 @@ package login
 
 import (
 	"context"
+	"math/rand"
 	"time"
 	"wy-goframe-admin/internal/model"
 	"wy-goframe-admin/internal/service"
@@ -108,27 +109,41 @@ func Unauthorized(ctx context.Context, code int, message string) {
 func Authenticator(ctx context.Context) (interface{}, error) {
 	var (
 		r  = g.RequestFromCtx(ctx)
-		in model.UserLoginInput
+		in model.SysUserLoginInput
 	)
 	if err := r.Parse(&in); err != nil {
 		return "", err
 	}
-	user := service.User().UserCheck(ctx, in)
 
-	if user["enable"] == 0 {
-		return user, nil
-	} else if user["enable"] == 1 {
-		return nil, jwt.ErrFailedEnable
+	user, err := service.SysUser().UserLogin(ctx, in)
+
+	if err == nil {
+		if user["enable"] == 0 {
+			return user, nil
+		} else {
+			return nil, jwt.ErrFailedEnable
+		}
 	} else {
-		return nil, jwt.ErrFailedAuthentication
+		return nil, err
 	}
+
 }
 
 // 登录验证码
 func (s *sLogin) LoginCode(ctx context.Context) (out string, err error) {
-	//作为测试先写死
 
-	out = "https://dummyimage.com/100x40/dcdfe6/000000.png&text=EASM"
+	src := rand.NewSource(time.Now().UnixNano())
+	// 创建一个新的随机数生成器
+	const allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	var x [4]byte
+	for i := range x {
+		x[i] = allowedChars[rand.New(src).Intn(len(allowedChars))]
+	}
+	code := string(x[:])
+
+	out = "https://dummyimage.com/100x40/dcdfe6/000000.png&text=" + code
+	r := g.RequestFromCtx(ctx)
+	r.Session.MustSet("code", code)
 
 	return out, nil
 }

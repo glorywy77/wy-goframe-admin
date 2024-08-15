@@ -16,7 +16,7 @@ type SysApiSaveReq struct {
 }
 
 type SysApiPageReq struct {
-	g.Meta    `path:"/api/sysApi/page" method:"get" summary:"分页获取权限规则" tags:"CasbinService"`
+	g.Meta    `path:"/api/sysApi/page" method:"get" summary:"分页获取权限规则" tags:"SysApiService"`
 	Path      string
 	Method    string
 	Api_group string
@@ -30,6 +30,16 @@ type SysApiPageRes struct {
 }
 
 type SysApiDeleteReq struct {
-	g.Meta `path:"/api/sysApi/delete" method:"delete" summary:"删除权限规则" tags:"CasbinService"`
-	Id     int `v:"required" dc:"权限规则Id"`
+	g.Meta `path:"/api/sysApi/delete" method:"delete" summary:"删除权限规则" tags:"SysApiService"`
+	Path   string `v:"required" `
+	Method string `v:"required" `
+}
+
+
+type SysApiGroupsListReq struct{
+	g.Meta `path:"/api/sysApi/groups" method:"get" summary:"获取接口组列表" tags:"SysApiService"`
+}
+
+type SysApiGroupsListRes struct {
+	Items []*model.SysApiGroupsListOutput `json:"items"`
 }

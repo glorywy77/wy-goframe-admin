@@ -15,6 +15,9 @@ type (
 		RoleSave(ctx context.Context, in model.SysRoleSaveInput) (err error)
 		RolePage(ctx context.Context, in model.SysRolePageInput) (out []*model.SysRolePageOutput, total int, err error)
 		RoleDelete(ctx context.Context, in model.SysRoleDeleteInput) (err error)
+		GetAllApis(ctx context.Context, in model.SysRoleAllApisInput) (out *model.SysRoleAllApisOutput, err error)
+		RoleHasApis(ctx context.Context, in model.SysRoleHasApisInput) (out *model.SysRoleHasApisOutput, err error)
+		RoleList(ctx context.Context, in model.SysRoleListInput) (out []*model.SysRoleListOutput, err error)
 	}
 )
 

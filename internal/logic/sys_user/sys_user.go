@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"errors"
+	"strings"
 	"wy-goframe-admin/internal/dao"
 	"wy-goframe-admin/internal/model"
 	"wy-goframe-admin/internal/service"
@@ -14,37 +15,46 @@ import (
 )
 
 type (
-	sUser struct{}
+	sSysUser struct{}
 )
 
-func New() *sUser {
-	return &sUser{}
+func New() *sSysUser {
+	return &sSysUser{}
 }
 
 func init() {
-	service.RegisterUser(New())
+	service.RegisterSysUser(New())
 }
 
-// UserCheck 用户登录校验
-func (s *sUser) UserCheck(ctx context.Context, in model.UserLoginInput) (userMap map[string]interface{}) {
+// / 用户登录校验
+func (s *sSysUser) UserLogin(ctx context.Context, in model.SysUserLoginInput) (userMap map[string]interface{}, err error) {
+
+	//校验验证码是否正确
+	r := g.RequestFromCtx(ctx)
+	code := gconv.String(r.Session.MustGet("code"))
+	if strings.ToUpper(in.Code) != code {
+		err = errors.New("验证码错误")
+		g.Log().Errorf(ctx, "%v", err)
+		return nil, err
+	}
 
 	//校验密码是否正确
-	m := dao.User.Ctx(ctx)
+	m := dao.SysUser.Ctx(ctx)
 	hashedPassword, err := m.Fields("password").Where("username", in.UserName).Value()
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	if hashedPassword == nil {
 		err = errors.New("用户名不存在")
 		g.Log().Errorf(ctx, "%v", err)
-		return nil
+		return nil, err
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(gconv.String(hashedPassword)), []byte(in.Password))
 	if err != nil {
 		err = errors.New("密码不正确")
 		g.Log().Errorf(ctx, "%v", err)
-		return nil
+		return nil, err
 	}
 
 	//查询当前登录用户信息
@@ -57,17 +67,16 @@ func (s *sUser) UserCheck(ctx context.Context, in model.UserLoginInput) (userMap
 	user := User{}
 	err = m.Fields("userid,username,roles,enable").Where("username", in.UserName).Scan(&user)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	userMap = gconv.Map(user)
-	// g.Dump(userMap)
 
-	return userMap
+	return userMap, nil
 }
 
 // 新增用户
-func (s *sUser) UserCreate(ctx context.Context, in model.UserCreateInput) (err error) {
-	_, err = dao.User.Ctx(ctx).Data(in).Insert()
+func (s *sSysUser) UserCreate(ctx context.Context, in model.SysUserCreateInput) (err error) {
+	_, err = dao.SysUser.Ctx(ctx).Data(in).Insert()
 	//这里对用户名重复进行一个错误改写前端比较好看
 	if gstr.Contains(gconv.String(err), "Duplicate entry") && gstr.Contains(gconv.String(err), "username") {
 		err = errors.New("用户已存在")
@@ -77,8 +86,8 @@ func (s *sUser) UserCreate(ctx context.Context, in model.UserCreateInput) (err e
 }
 
 // 更新用户基础信息,不修改密码
-func (s *sUser) UserUpdate(ctx context.Context, in model.UserUpdateInput) (err error) {
-	_, err = dao.User.Ctx(ctx).Data("email", in.Email, "roles", in.Roles, "enable", in.Enable, "remark", in.Remark).
+func (s *sSysUser) UserUpdate(ctx context.Context, in model.SysUserUpdateInput) (err error) {
+	_, err = dao.SysUser.Ctx(ctx).Data("email", in.Email, "roles", in.Roles, "enable", in.Enable, "remark", in.Remark).
 		Where("id", in.Id).
 		Where("username", in.UserName).
 		Update()
@@ -86,8 +95,8 @@ func (s *sUser) UserUpdate(ctx context.Context, in model.UserUpdateInput) (err e
 }
 
 // 重置用户密码
-func (s *sUser) UserResetPass(ctx context.Context, in model.UserResetPassInput) (err error) {
-	_, err = dao.User.Ctx(ctx).Data("password", in.Password).
+func (s *sSysUser) UserResetPass(ctx context.Context, in model.SysUserResetPassInput) (err error) {
+	_, err = dao.SysUser.Ctx(ctx).Data("password", in.Password).
 		Where("id", in.Id).
 		Where("username", in.UserName).
 		Update()
@@ -95,8 +104,8 @@ func (s *sUser) UserResetPass(ctx context.Context, in model.UserResetPassInput) 
 }
 
 // 分页返回用户信息
-func (s *sUser) UserPage(ctx context.Context, in model.UserPageInput) (out []*model.UserPageOutput, total int, err error) {
-	m := dao.User.Ctx(ctx)
+func (s *sSysUser) UserPage(ctx context.Context, in model.SysUserPageInput) (out []*model.SysUserPageOutput, total int, err error) {
+	m := dao.SysUser.Ctx(ctx)
 	err = m.Fields(`id,userid,username,email,roles,enable,create_at,update_at,remark`).
 		WhereLike("username", "%"+in.UserName+"%").
 		WhereLike("email", "%"+in.Email+"%").
@@ -106,16 +115,16 @@ func (s *sUser) UserPage(ctx context.Context, in model.UserPageInput) (out []*mo
 	if err != nil {
 		return nil, 0, err
 	}
+
 	return out, total, nil
 
 }
 
-
 // 删除用户
-func (s *sUser) UserDelete(ctx context.Context, in model.UserDeleteInput) (err error) {
-	_, err = dao.User.Ctx(ctx).
-	Where("id", in.Id).
-	Where("username", in.UserName).
-	Delete()
+func (s *sSysUser) UserDelete(ctx context.Context, in model.SysUserDeleteInput) (err error) {
+	_, err = dao.SysUser.Ctx(ctx).
+		Where("id", in.Id).
+		Where("username", in.UserName).
+		Delete()
 	return
 }

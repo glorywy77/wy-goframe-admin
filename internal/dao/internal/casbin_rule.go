@@ -20,28 +20,28 @@ type CasbinRuleDao struct {
 
 // CasbinRuleColumns defines and stores column names for table casbin_rule.
 type CasbinRuleColumns struct {
-	Id      string //
-	PType   string //
-	V0      string //
-	V1      string //
-	V2      string //
-	V3      string //
-	V4      string //
-	V5      string //
-	Summary string // 接口的概要信息
+	Id          string //
+	PType       string //
+	V0          string //
+	V1          string //
+	V2          string //
+	V3          string //
+	V4          string //
+	V5          string //
+	Description string // 接口的概要信息
 }
 
 // casbinRuleColumns holds the columns for table casbin_rule.
 var casbinRuleColumns = CasbinRuleColumns{
-	Id:      "id",
-	PType:   "p_type",
-	V0:      "v0",
-	V1:      "v1",
-	V2:      "v2",
-	V3:      "v3",
-	V4:      "v4",
-	V5:      "v5",
-	Summary: "summary",
+	Id:          "id",
+	PType:       "p_type",
+	V0:          "v0",
+	V1:          "v1",
+	V2:          "v2",
+	V3:          "v3",
+	V4:          "v4",
+	V5:          "v5",
+	Description: "description",
 }
 
 // NewCasbinRuleDao creates and returns a new DAO object for table data access.

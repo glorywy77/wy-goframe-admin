@@ -14,12 +14,16 @@ type LoginCodeRes struct {
 }
 
 type AuthLoginReq struct {
-	g.Meta `path:"/api/login" tags:"LoginService" method:"post"`
+	g.Meta   `path:"/api/login" tags:"LoginService" method:"post"`
+	UserName string `v:"required"`
+	Password string `v:"required"`
+	Code     string `v:"required"`
 }
 
 type AuthLoginRes struct {
 	Token  string    `json:"token"`
 	Expire time.Time `json:"expire"`
+	
 }
 
 type AuthRefreshTokenReq struct {

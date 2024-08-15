@@ -15,14 +15,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type userController struct{}
+type sysUserController struct{}
 
-var User = userController{}
+var SysUser = sysUserController{}
 
 // Info should be authenticated to view.
 // It is the get user data handler
-func (c *userController) Info(ctx context.Context, req *api.UserGetInfoReq) (res *api.UserGetInfoRes, err error) {
-	return &api.UserGetInfoRes{
+func (c *sysUserController) Info(ctx context.Context, req *api.SysUserGetInfoReq) (res *api.SysUserGetInfoRes, err error) {
+
+	return &api.SysUserGetInfoRes{
 		UserId:      gconv.String(service.Login().Auth().GetIdentity(ctx)),
 		IdentityKey: service.Login().Auth().IdentityKey,
 		Payload:     service.Login().Auth().GetPayload(ctx),
@@ -40,18 +41,19 @@ func GenerateUserID() string {
 	for i := range x {
 		x[i] = allowedChars[r.Intn(len(allowedChars))]
 	}
+
 	return string(x[:])
 }
 
 // 创建新用户
-func (c *userController) Create(ctx context.Context, req *api.UserCreateReq) (res *api.UserCreateRes, err error) {
+func (c *sysUserController) Create(ctx context.Context, req *api.SysUserCreateReq) (res *api.SysUserCreateRes, err error) {
 	g.DumpJson(req)
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
 	Password := gconv.String(hashedPassword)
-	err = service.User().UserCreate(ctx, model.UserCreateInput{
+	err = service.SysUser().UserCreate(ctx, model.SysUserCreateInput{
 		UserId:   GenerateUserID(),
 		UserName: req.UserName,
 		Password: Password,
@@ -63,16 +65,16 @@ func (c *userController) Create(ctx context.Context, req *api.UserCreateReq) (re
 	if err != nil {
 		return nil, err
 	}
-	res = &api.UserCreateRes{
+	res = &api.SysUserCreateRes{
 		Result: "用户创建成功",
 	}
 	return
 }
 
 // 修改用户基础信息（不包含密码）
-func (c *userController) Update(ctx context.Context, req *api.UserUpdateReq) (res *api.UserUpdateRes, err error) {
+func (c *sysUserController) Update(ctx context.Context, req *api.SysUserUpdateReq) (res *api.SysUserUpdateRes, err error) {
 	g.DumpJson(req)
-	err = service.User().UserUpdate(ctx, model.UserUpdateInput{
+	err = service.SysUser().UserUpdate(ctx, model.SysUserUpdateInput{
 		Id:       req.Id,
 		UserName: req.UserName,
 		Email:    req.Email,
@@ -83,20 +85,21 @@ func (c *userController) Update(ctx context.Context, req *api.UserUpdateReq) (re
 	if err != nil {
 		return nil, err
 	}
-	res = &api.UserUpdateRes{
+	res = &api.SysUserUpdateRes{
 		Result: "用户更新成功",
 	}
+
 	return
 }
 
 // 重置用户密码
-func (c *userController) ResetPass(ctx context.Context, req *api.UserResetPassReq) (res *api.UserResetPassRes, err error) {
+func (c *sysUserController) ResetPass(ctx context.Context, req *api.SysUserResetPassReq) (res *api.SysUserResetPassRes, err error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
 	Password := gconv.String(hashedPassword)
-	err = service.User().UserResetPass(ctx, model.UserResetPassInput{
+	err = service.SysUser().UserResetPass(ctx, model.SysUserResetPassInput{
 		Id:       req.Id,
 		UserName: req.UserName,
 		Password: Password,
@@ -104,15 +107,15 @@ func (c *userController) ResetPass(ctx context.Context, req *api.UserResetPassRe
 	if err != nil {
 		return nil, err
 	}
-	res = &api.UserResetPassRes{
+	res = &api.SysUserResetPassRes{
 		Result: "用户重置密码成功",
 	}
 	return
 }
 
 // 分页返回用户信息
-func (c *userController) Page(ctx context.Context, req *api.UserPageReq) (res *api.UserPageRes, err error) {
-	data, total, err := service.User().UserPage(ctx, model.UserPageInput{
+func (c *sysUserController) Page(ctx context.Context, req *api.SysUserPageReq) (res *api.SysUserPageRes, err error) {
+	data, total, err := service.SysUser().UserPage(ctx, model.SysUserPageInput{
 		UserName:    req.UserName,
 		Email:       req.Email,
 		CurrentPage: req.CurrentPage,
@@ -121,7 +124,7 @@ func (c *userController) Page(ctx context.Context, req *api.UserPageReq) (res *a
 	if err != nil {
 		return nil, err
 	}
-	res = &api.UserPageRes{
+	res = &api.SysUserPageRes{
 		CommonPaginationReq: api.CommonPaginationReq{
 			PageSize:    req.PageSize,
 			CurrentPage: req.CurrentPage,
@@ -131,27 +134,28 @@ func (c *userController) Page(ctx context.Context, req *api.UserPageReq) (res *a
 		},
 		Items: data,
 	}
+
 	return
 }
 
 // 用户删除
-func (c *userController) Delete(ctx context.Context, req *api.UserDeleteReq) (res *api.UserDeleteRes, err error) {
+func (c *sysUserController) Delete(ctx context.Context, req *api.SysUserDeleteReq) (res *api.CommonResultRes, err error) {
 	if req.UserName == "admin" {
-		res = &api.UserDeleteRes{
+		res = &api.CommonResultRes{
 			Result: "admin用户禁止删除",
 		}
 		err = errors.New("admin用户禁止删除")
-    g.Log().Errorf(ctx, "admin用户禁止删除")
+		g.Log().Errorf(ctx, "admin用户禁止删除")
 
 	} else {
-		err = service.User().UserDelete(ctx, model.UserDeleteInput{
+		err = service.SysUser().UserDelete(ctx, model.SysUserDeleteInput{
 			Id:       req.Id,
 			UserName: req.UserName,
 		})
 		if err != nil {
 			return nil, err
 		}
-		res = &api.UserDeleteRes{
+		res = &api.CommonResultRes{
 			Result: "用户删除成功",
 		}
 	}

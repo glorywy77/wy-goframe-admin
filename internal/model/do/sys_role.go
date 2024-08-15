@@ -13,7 +13,7 @@ import (
 type SysRole struct {
 	g.Meta      `orm:"table:sys_role, do:true"`
 	Id          interface{} //
-	Role        interface{} //
+	Rolename    interface{} //
 	Description interface{} //
 	CreateAt    *gtime.Time //
 	UpdateAt    *gtime.Time //

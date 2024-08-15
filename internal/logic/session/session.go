@@ -18,10 +18,12 @@ func init() {
 	service.RegisterSession(New())
 }
 
-func (s *sSession) SetSession(r *ghttp.Request) {
-	if r.URL.Path == "/login" {
-		Username := r.Get("Username")
-		r.Session.MustSet("Username", Username)
 
+//暂时无用
+func (s *sSession) SetSession(r *ghttp.Request) {
+	if r.URL.Path == "/api/xxxxx" {
+		loginCode := "4321"
+		r.Session.MustSet("loginCode", loginCode)
+		// g.Dump(r.Session.Id())
 	}
 }

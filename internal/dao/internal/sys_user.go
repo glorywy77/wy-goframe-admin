@@ -11,62 +11,72 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 )
 
-// SysRoleDao is the data access object for table sys_role.
-type SysRoleDao struct {
+// SysUserDao is the data access object for table sys_user.
+type SysUserDao struct {
 	table   string         // table is the underlying table name of the DAO.
 	group   string         // group is the database configuration group name of current DAO.
-	columns SysRoleColumns // columns contains all the column names of Table for convenient usage.
+	columns SysUserColumns // columns contains all the column names of Table for convenient usage.
 }
 
-// SysRoleColumns defines and stores column names for table sys_role.
-type SysRoleColumns struct {
-	Id          string //
-	Rolename    string //
-	Description string //
-	CreateAt    string //
-	UpdateAt    string //
+// SysUserColumns defines and stores column names for table sys_user.
+type SysUserColumns struct {
+	Id       string //
+	Userid   string //
+	Username string //
+	Password string //
+	Email    string //
+	Roles    string //
+	Enable   string //
+	CreateAt string //
+	UpdateAt string //
+	Remark   string //
 }
 
-// sysRoleColumns holds the columns for table sys_role.
-var sysRoleColumns = SysRoleColumns{
-	Id:          "id",
-	Rolename:    "rolename",
-	Description: "description",
-	CreateAt:    "create_at",
-	UpdateAt:    "update_at",
+// sysUserColumns holds the columns for table sys_user.
+var sysUserColumns = SysUserColumns{
+	Id:       "id",
+	Userid:   "userid",
+	Username: "username",
+	Password: "password",
+	Email:    "email",
+	Roles:    "roles",
+	Enable:   "enable",
+	CreateAt: "create_at",
+	UpdateAt: "update_at",
+	Remark:   "remark",
 }
 
-// NewSysRoleDao creates and returns a new DAO object for table data access.
-func NewSysRoleDao() *SysRoleDao {
-	return &SysRoleDao{
+// NewSysUserDao creates and returns a new DAO object for table data access.
+func NewSysUserDao() *SysUserDao {
+	return &SysUserDao{
 		group:   "default",
-		table:   "sys_role",
-		columns: sysRoleColumns,
+		table:   "sys_user",
+		columns: sysUserColumns,
 	}
 }
 
 // DB retrieves and returns the underlying raw database management object of current DAO.
-func (dao *SysRoleDao) DB() gdb.DB {
+func (dao *SysUserDao) DB() gdb.DB {
 	return g.DB(dao.group)
 }
 
 // Table returns the table name of current dao.
-func (dao *SysRoleDao) Table() string {
+func (dao *SysUserDao) Table() string {
 	return dao.table
 }
 
 // Columns returns all column names of current dao.
-func (dao *SysRoleDao) Columns() SysRoleColumns {
+func (dao *SysUserDao) Columns() SysUserColumns {
 	return dao.columns
 }
 
 // Group returns the configuration group name of database of current dao.
-func (dao *SysRoleDao) Group() string {
+func (dao *SysUserDao) Group() string {
 	return dao.group
 }
 
 // Ctx creates and returns the Model for current DAO, It automatically sets the context for current operation.
-func (dao *SysRoleDao) Ctx(ctx context.Context) *gdb.Model {
+func (dao *SysUserDao) Ctx(ctx context.Context) *gdb.Model {
 	return dao.DB().Model(dao.table).Safe().Ctx(ctx)
 }
 
@@ -76,6 +86,6 @@ func (dao *SysRoleDao) Ctx(ctx context.Context) *gdb.Model {
 //
 // Note that, you should not Commit or Rollback the transaction in function f
 // as it is automatically handled by this function.
-func (dao *SysRoleDao) Transaction(ctx context.Context, f func(ctx context.Context, tx gdb.TX) error) (err error) {
+func (dao *SysUserDao) Transaction(ctx context.Context, f func(ctx context.Context, tx gdb.TX) error) (err error) {
 	return dao.Ctx(ctx).Transaction(ctx, f)
 }

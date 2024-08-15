@@ -10,14 +10,14 @@ import (
 
 // CasbinRule is the golang structure of table casbin_rule for DAO operations like Where/Data.
 type CasbinRule struct {
-	g.Meta  `orm:"table:casbin_rule, do:true"`
-	Id      interface{} //
-	PType   interface{} //
-	V0      interface{} //
-	V1      interface{} //
-	V2      interface{} //
-	V3      interface{} //
-	V4      interface{} //
-	V5      interface{} //
-	Summary interface{} // 接口的概要信息
+	g.Meta      `orm:"table:casbin_rule, do:true"`
+	Id          interface{} //
+	PType       interface{} //
+	V0          interface{} //
+	V1          interface{} //
+	V2          interface{} //
+	V3          interface{} //
+	V4          interface{} //
+	V5          interface{} //
+	Description interface{} // 接口的概要信息
 }

@@ -15,6 +15,7 @@ type (
 		ApiSave(ctx context.Context, in model.SysApiSaveInput) (err error)
 		ApiPage(ctx context.Context, in model.SysApiPageInput) (out []*model.SysApiPageOutput, total int, err error)
 		ApiDelete(ctx context.Context, in model.SysApiDeleteInput) (err error)
+		ApiGroupsList(ctx context.Context, in model.SysApiGroupsListInput) (out []*model.SysApiGroupsListOutput, err error)
 	}
 )
 

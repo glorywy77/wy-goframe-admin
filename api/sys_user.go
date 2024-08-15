@@ -2,25 +2,24 @@ package api
 
 import (
 	"wy-goframe-admin/internal/model"
+
 	"github.com/gogf/gf/v2/frame/g"
 )
 
-
-//查询当前登录用户的信息
-type UserGetInfoReq struct {
-	g.Meta `path:"/api/user/info" tags:"UserService" method:"get"  summary:"当前登录用户信息"`
+// 查询当前登录用户的信息
+type SysUserGetInfoReq struct {
+	g.Meta `path:"/api/sysUser/info" tags:"SysUserService" method:"get"  summary:"当前登录用户信息"`
 }
 
-type UserGetInfoRes struct {
+type SysUserGetInfoRes struct {
 	UserId      string `json:"userid" summary:"用户id作为唯一标识"` //此字段绝对不能用于传参会覆盖同命参数!!!!!比如你admin用户登录后,用read的userid去请求,会被覆盖成admin的userid
 	IdentityKey string `json:"identity_key"`
 	Payload     g.Map  `json:"payload"`
 }
 
-
-//增
-type UserCreateReq struct {
-	g.Meta          `path:"/api/user/create" method:"post"  tags:"UserService" summary:"新增用户"`
+// 增
+type SysUserCreateReq struct {
+	g.Meta          `path:"/api/sysUser/create" method:"post"  tags:"SysUserService" summary:"新增用户"`
 	UserName        string  `v:"required" `
 	Password        string  `v:"required|length:8,30#请输入密码|密码长度不够" `
 	ConfirmPassword string  `v:"required|length:8,30|same:Password#请确认密码|密码长度不够|两次密码不一致"`
@@ -30,15 +29,13 @@ type UserCreateReq struct {
 	Remark          string  `dc:"备注"`
 }
 
-type UserCreateRes struct {
+type SysUserCreateRes struct {
 	Result string `json:"result"`
 }
 
-
-
-//改
-type UserUpdateReq struct {
-	g.Meta   `path:"/api/user/update" method:"put"  tags:"UserService" summary:"修改用户"`
+// 改
+type SysUserUpdateReq struct {
+	g.Meta   `path:"/api/sysUser/update" method:"put"  tags:"SysUserService" summary:"修改用户"`
 	Id       int     `v:"required" dc:"ID"`
 	UserName string  `v:"required" `
 	Email    string  `v:"required"`
@@ -47,45 +44,39 @@ type UserUpdateReq struct {
 	Remark   string  `dc:"备注"`
 }
 
-type UserUpdateRes struct {
+type SysUserUpdateRes struct {
 	Result string `json:"result"`
 }
 
-type UserResetPassReq struct {
-	g.Meta          `path:"/api/user/resetPass" method:"put"  tags:"UserService" summary:"重置密码"`
+type SysUserResetPassReq struct {
+	g.Meta          `path:"/api/sysUser/resetPass" method:"put"  tags:"SysUserService" summary:"重置密码"`
 	Id              int    `v:"required" `
 	UserName        string `v:"required" `
 	Password        string `v:"required|length:8,30#请输入密码|密码长度不够" `
 	ConfirmPassword string `v:"required|length:8,30|same:Password#请确认密码|密码长度不够|两次密码不一致"`
 }
 
-type UserResetPassRes struct {
+type SysUserResetPassRes struct {
 	Result string `json:"result"`
 }
 
-//查
-type UserPageReq struct {
-	g.Meta   `path:"/api/user/page" method:"get" tags:"UserService" summary:"用户列表"`
+// 查
+type SysUserPageReq struct {
+	g.Meta   `path:"/api/sysUser/page" method:"get" tags:"SysUserService" summary:"用户列表"`
 	UserName string `d:"%" v:"required"  dc:"用户名可以模糊查询"`
 	Email    string `d:"%" v:"required"  dc:"邮箱可以模糊查询"`
 	CommonPaginationReq
 }
 
-type UserPageRes struct {
+type SysUserPageRes struct {
 	CommonPaginationReq
 	CommonPaginationRes
-	Items []*model.UserPageOutput `json:"items"`
+	Items []*model.SysUserPageOutput `json:"items"`
 }
 
-
-//删
-type UserDeleteReq struct {
-	g.Meta          `path:"/api/user/delete" method:"delete"  tags:"UserService" summary:"删除用户"`
-	Id              int    `v:"required" `
-	UserName        string `v:"required" `
+// 删
+type SysUserDeleteReq struct {
+	g.Meta   `path:"/api/sysUser/delete" method:"delete"  tags:"SysUserService" summary:"删除用户"`
+	Id       int    `v:"required" `
+	UserName string `v:"required" `
 }
-type UserDeleteRes struct {
-	Result string `json:"result"`
-}
-
-	

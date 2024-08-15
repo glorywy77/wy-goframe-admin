@@ -31,4 +31,15 @@ type SysApiPageOutput struct {
 	UpdateAt    *gtime.Time `json:"updateAt"`
 }
 
-type SysApiDeleteInput struct{ Id int }
+type SysApiDeleteInput struct{
+	Path        string      
+	Method      string      
+}
+
+
+type SysApiGroupsListInput struct {
+}
+
+type SysApiGroupsListOutput struct {
+	ApiGroup string `json:"apiGroup"`
+}

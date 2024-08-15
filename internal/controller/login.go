@@ -4,8 +4,6 @@ import (
 	"context"
 	"wy-goframe-admin/api"
 	"wy-goframe-admin/internal/service"
-
-	"github.com/gogf/gf/v2/frame/g"
 )
 
 type cLogin struct{}
@@ -37,6 +35,5 @@ func (c *cLogin) LoginCode(ctx context.Context, req *api.LoginCodeReq) (res *api
 	res = &api.LoginCodeRes{
 		CodeUrl: data,
 	}
-	g.Dump(res)
 	return res, nil
 }

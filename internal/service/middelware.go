@@ -15,6 +15,7 @@ type (
 		Auth(r *ghttp.Request)
 		Session(r *ghttp.Request)
 		Casbin(r *ghttp.Request)
+		AuditLog(r *ghttp.Request)
 	}
 )
 

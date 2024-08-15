@@ -24,6 +24,16 @@ func init() {
 // 保存接口
 func (s *sSysApi) ApiSave(ctx context.Context, in model.SysApiSaveInput) (err error) {
 	_, err = dao.SysApi.Ctx(ctx).Data(in).Save()
+	if err != nil {
+		return
+	}
+	//所有接口对应admin角色都是默认添加
+	_, err = dao.CasbinRule.Ctx(ctx).Data(model.CasbinRuleSaveInput{
+		P_type:      "p",
+		V0:          "admin",
+		V1:          in.Path,
+		V2:          in.Method,
+		Description: in.Description}).Save()
 	return
 }
 
@@ -40,12 +50,28 @@ func (s *sSysApi) ApiPage(ctx context.Context, in model.SysApiPageInput) (out []
 	if err != nil {
 		return nil, 0, err
 	}
+
 	return out, total, nil
 
 }
 
 // 删
 func (s *sSysApi) ApiDelete(ctx context.Context, in model.SysApiDeleteInput) (err error) {
-	_, err = dao.SysApi.Ctx(ctx).Where("id", in.Id).Delete()
+	_, err = dao.SysApi.Ctx(ctx).Where("path", in.Path).Where("method", in.Method).Delete()
+	if err != nil {
+		return err
+	}
+	_, err = dao.CasbinRule.Ctx(ctx).Where("v1", in.Path).Where("v2", in.Method).Delete()
 	return
+}
+
+func (s *sSysApi) ApiGroupsList(ctx context.Context, in model.SysApiGroupsListInput) (out []*model.SysApiGroupsListOutput, err error) {
+	m := dao.SysApi.Ctx(ctx)
+	err = m.Fields("api_group").Group("api_group").Scan(&out)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
 }

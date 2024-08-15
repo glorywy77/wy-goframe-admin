@@ -6,18 +6,12 @@
 package service
 
 import (
-	"context"
-	"wy-goframe-admin/internal/model"
-
 	"github.com/gogf/gf/v2/net/ghttp"
 )
 
 type (
 	ICasbin interface {
 		RoleCheck(r *ghttp.Request)
-		RuleSave(ctx context.Context, in model.CasbinRuleSaveInput) (err error)
-		RulePage(ctx context.Context, in model.CasbinRulePageInput) (out []*model.CasbinRulePageOutput, total int, err error)
-		RuleDelete(ctx context.Context, in model.CasbinRuleDeleteInput) (err error)
 	}
 )
 

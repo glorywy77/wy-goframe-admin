@@ -1,10 +1,7 @@
 package casbin
 
 import (
-	"context"
 	"errors"
-	"wy-goframe-admin/internal/dao"
-	"wy-goframe-admin/internal/model"
 	"wy-goframe-admin/internal/service"
 
 	"github.com/casbin/casbin/v2"
@@ -39,6 +36,7 @@ func ErrReponse(r *ghttp.Request, err error) {
 // RoleCheck用于查询和校验用户权限
 func (s *sCasbin) RoleCheck(r *ghttp.Request) {
 	// fmt.Printf("r: %v\n", *r)
+	
 	ctx := r.GetCtx()
 	//方法一 在先在session中去加然后再session中去取
 	//Username, err := r.Session.Get("Username")
@@ -106,30 +104,30 @@ func (s *sCasbin) RoleCheck(r *ghttp.Request) {
 }
 
 // 保存和新增权限规则
-func (s *sCasbin) RuleSave(ctx context.Context, in model.CasbinRuleSaveInput) (err error) {
-	_, err = dao.CasbinRule.Ctx(ctx).Data(in).Save()
-	return
-}
+// func (s *sCasbin) RuleSave(ctx context.Context, in model.CasbinRuleSaveInput) (err error) {
+// 	_, err = dao.CasbinRule.Ctx(ctx).Data(in).Save()
+// 	return
+// }
 
 // 分页展示所有权限规则
-func (s *sCasbin) RulePage(ctx context.Context, in model.CasbinRulePageInput) (out []*model.CasbinRulePageOutput, total int, err error) {
-	m := dao.CasbinRule.Ctx(ctx)
-	err = m.Fields(`id,p_type,v0,v1,v2,v3,v4,v5,summary`).
-		WhereLike("v0", "%"+in.V0+"%").
-		WhereLike("v1", "%"+in.V1+"%").
-		WhereLike("v2", "%"+in.V2+"%").
-		OrderAsc("v0,id").Limit((in.CurrentPage-1)*in.PageSize, in.PageSize).
-		ScanAndCount(&out, &total, false)
+// func (s *sCasbin) RulePage(ctx context.Context, in model.CasbinRulePageInput) (out []*model.CasbinRulePageOutput, total int, err error) {
+// 	m := dao.CasbinRule.Ctx(ctx)
+// 	err = m.Fields(`id,p_type,v0,v1,v2,v3,v4,v5,description`).
+// 		WhereLike("v0", "%"+in.V0+"%").
+// 		WhereLike("v1", "%"+in.V1+"%").
+// 		WhereLike("v2", "%"+in.V2+"%").
+// 		OrderAsc("v0,id").Limit((in.CurrentPage-1)*in.PageSize, in.PageSize).
+// 		ScanAndCount(&out, &total, false)
 
-	if err != nil {
-		return nil, 0, err
-	}
-	return out, total, nil
+// 	if err != nil {
+// 		return nil, 0, err
+// 	}
+// 	return out, total, nil
 
-}
+// }
 
 // 删除权限规则
-func (s *sCasbin) RuleDelete(ctx context.Context, in model.CasbinRuleDeleteInput) (err error) {
-	_, err = dao.CasbinRule.Ctx(ctx).Where("id", in.Id).Delete()
-	return
-}
+// func (s *sCasbin) RuleDelete(ctx context.Context, in model.CasbinRuleDeleteInput) (err error) {
+// 	_, err = dao.CasbinRule.Ctx(ctx).Where("id", in.Id).Delete()
+// 	return
+// }
