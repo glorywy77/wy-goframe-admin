@@ -14,8 +14,30 @@ require (
 )
 
 require (
+	github.com/alibabacloud-go/alibabacloud-gateway-spi v0.0.4 // indirect
+	github.com/alibabacloud-go/darabonba-openapi v0.1.18 // indirect
+	github.com/alibabacloud-go/debug v1.0.0 // indirect
+	github.com/alibabacloud-go/ecs-20140526/v2 v2.1.3 // indirect
+	github.com/alibabacloud-go/endpoint-util v1.1.0 // indirect
+	github.com/alibabacloud-go/openapi-util v0.1.0 // indirect
+	github.com/alibabacloud-go/tea-utils v1.4.5 // indirect
+	github.com/alibabacloud-go/tea-xml v1.1.3 // indirect
+	github.com/aliyun/credentials-go v1.3.1 // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
+	github.com/tjfoc/gmsm v1.3.2 // indirect
+	golang.org/x/image v0.20.0 // indirect
+	gopkg.in/ini.v1 v1.56.0 // indirect
+)
+
+require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/BurntSushi/toml v1.3.2 // indirect
+	github.com/afocus/captcha v0.0.0-20191010092841-4bd1f21c8868
+	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.9 // indirect
+	github.com/alibabacloud-go/ecs-20140526/v4 v4.1.13 // indirect
+	github.com/alibabacloud-go/tea v1.2.2
+	github.com/alibabacloud-go/tea-console v1.0.0
+	github.com/alibabacloud-go/tea-utils/v2 v2.0.6 // indirect
 	github.com/casbin/govaluate v1.1.1 // indirect
 	github.com/casbin/xorm-adapter/v2 v2.5.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
@@ -47,7 +69,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.14.0 // indirect
 	golang.org/x/net v0.24.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	xorm.io/builder v0.3.13 // indirect
 	xorm.io/xorm v1.3.9 // indirect

@@ -1,14 +1,16 @@
 package login
 
 import (
+	"bytes"
 	"context"
-	"math/rand"
+	"image/png"
 	"time"
 	"wy-goframe-admin/internal/model"
 	"wy-goframe-admin/internal/service"
 
 	jwt "wy-goframe-admin/internal/logic/login/jwt"
 
+	"github.com/afocus/captcha"
 	_ "github.com/gogf/gf/contrib/nosql/redis/v2"
 
 	//"github.com/gogf/gf/v2/database/gredis"
@@ -130,20 +132,39 @@ func Authenticator(ctx context.Context) (interface{}, error) {
 }
 
 // 登录验证码
-func (s *sLogin) LoginCode(ctx context.Context) (out string, err error) {
+// func (s *sLogin) LoginCode(ctx context.Context) (out string, err error) {
 
-	src := rand.NewSource(time.Now().UnixNano())
-	// 创建一个新的随机数生成器
-	const allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	var x [4]byte
-	for i := range x {
-		x[i] = allowedChars[rand.New(src).Intn(len(allowedChars))]
-	}
-	code := string(x[:])
+// 	src := rand.NewSource(time.Now().UnixNano())
+// 	// 创建一个新的随机数生成器
+// 	const allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+// 	var x [4]byte
+// 	for i := range x {
+// 		x[i] = allowedChars[rand.New(src).Intn(len(allowedChars))]
+// 	}
+// 	code := string(x[:])
 
-	out = "https://dummyimage.com/100x40/dcdfe6/000000.png&text=" + code
+// 	out = "https://dummyimage.com/100x40/dcdfe6/000000.png&text=" + code
+// 	r := g.RequestFromCtx(ctx)
+// 	r.Session.MustSet("code", code)
+
+// 	return out, nil
+// }
+
+func (s *sLogin) LoginCode(ctx context.Context) (out []byte, err error) {
+
+	var cap *captcha.Captcha = captcha.New()
+	cap.SetFont("manifest/config/comic.ttf")
+	cap.SetSize(100, 40)
+	img, code := cap.Create(4, captcha.ALL)
+
+	//验证码写入session用于后续验证
 	r := g.RequestFromCtx(ctx)
 	r.Session.MustSet("code", code)
 
-	return out, nil
+	// 将生成的图像转换为字节切片
+	buf := new(bytes.Buffer)
+	png.Encode(buf, img)
+	out = buf.Bytes()
+
+	return
 }

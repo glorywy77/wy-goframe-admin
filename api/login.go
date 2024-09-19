@@ -9,8 +9,12 @@ import (
 type LoginCodeReq struct {
 	g.Meta `path:"/api/login/code" tags:"LoginService" method:"get" summary:"登录获取验证码"`
 }
-type LoginCodeRes struct {
-	CodeUrl string `json:"codeurl"`
+// type LoginCodeRes struct {
+// 	CodeUrl string `json:"codeUrl"`
+// }
+
+type LoginCodeRes struct{
+	CaptchaSrc []byte `json:"captchaSrc"`
 }
 
 type AuthLoginReq struct {

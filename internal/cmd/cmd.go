@@ -39,7 +39,6 @@ var (
 						service.Middelware().AuditLog,
 						service.Middelware().Auth,
 						service.Middelware().Casbin,
-						
 					)
 
 					group.Bind(
@@ -47,6 +46,7 @@ var (
 						controller.SysApi,
 						controller.SysRole,
 						controller.AuditLog,
+						controller.Ali,
 					)
 				})
 			})

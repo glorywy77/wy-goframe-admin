@@ -5,6 +5,7 @@
 package logic
 
 import (
+	_ "wy-goframe-admin/internal/logic/ali"
 	_ "wy-goframe-admin/internal/logic/audit_log"
 	_ "wy-goframe-admin/internal/logic/casbin"
 	_ "wy-goframe-admin/internal/logic/login"

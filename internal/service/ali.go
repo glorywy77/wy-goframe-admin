@@ -7,27 +7,28 @@ package service
 
 import (
 	"context"
-	jwt "wy-goframe-admin/internal/logic/login/jwt"
+	"wy-goframe-admin/internal/model"
+
+	"github.com/gogf/gf/v2/frame/g"
 )
 
 type (
-	ILogin interface {
-		Auth() *jwt.GfJWTMiddleware
-		LoginCode(ctx context.Context) (out []byte, err error)
+	IEcs interface {
+		EcsPage(ctx context.Context, in model.AliEcsPageInput) (out g.Map, err error)
 	}
 )
 
 var (
-	localLogin ILogin
+	localEcs IEcs
 )
 
-func Login() ILogin {
-	if localLogin == nil {
-		panic("implement not found for interface ILogin, forgot register?")
+func Ecs() IEcs {
+	if localEcs == nil {
+		panic("implement not found for interface IEcs, forgot register?")
 	}
-	return localLogin
+	return localEcs
 }
 
-func RegisterLogin(i ILogin) {
-	localLogin = i
+func RegisterEcs(i IEcs) {
+	localEcs = i
 }

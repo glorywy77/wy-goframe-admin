@@ -33,7 +33,7 @@ func (c *cLogin) LoginCode(ctx context.Context, req *api.LoginCodeReq) (res *api
 		return nil, err
 	}
 	res = &api.LoginCodeRes{
-		CodeUrl: data,
+		CaptchaSrc: data,
 	}
 	return res, nil
 }

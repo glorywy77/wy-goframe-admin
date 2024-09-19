@@ -32,7 +32,7 @@ func (s *sSysUser) UserLogin(ctx context.Context, in model.SysUserLoginInput) (u
 	//校验验证码是否正确
 	r := g.RequestFromCtx(ctx)
 	code := gconv.String(r.Session.MustGet("code"))
-	if strings.ToUpper(in.Code) != code {
+	if !strings.EqualFold(in.Code, code) {
 		err = errors.New("验证码错误")
 		g.Log().Errorf(ctx, "%v", err)
 		return nil, err
